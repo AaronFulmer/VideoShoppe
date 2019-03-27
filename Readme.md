@@ -11,7 +11,10 @@ Done.
   
 # Changelog
 
-**v1.2.0 2/25/2019**
+**v1.1.2 3/27/2019**
+- Login screen fully functional working with the database
+
+**v1.1.1 2/25/2019**
 - Working main menu with Check In Screen added.
 
 **v1.1.0 2/25/2019**
