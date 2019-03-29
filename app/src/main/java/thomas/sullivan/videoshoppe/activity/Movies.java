@@ -45,7 +45,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.model.GradientColor;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 
 import thomas.sullivan.videoshoppe.activity.R;
@@ -62,56 +61,12 @@ import java.util.List;
 
 import java.util.Calendar;
 
-public class Menu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Movies extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     UserDatabase usersDatabase;
     String firstName;
     String lastName;
-
-    BarChart chart;
-
-    Calendar calendar = new Calendar() {
-        @Override
-        protected void computeTime() {
-
-        }
-
-        @Override
-        protected void computeFields() {
-
-        }
-
-        @Override
-        public void add(int field, int amount) {
-
-        }
-
-        @Override
-        public void roll(int field, boolean up) {
-
-        }
-
-        @Override
-        public int getMinimum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getMaximum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getGreatestMinimum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getLeastMaximum(int field) {
-            return 0;
-        }
-    };
-
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -139,6 +94,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,9 +103,6 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         usersDatabase = new UserDatabase(this);
         firstName = usersDatabase.getLoggedInUserFirstName();
         lastName = usersDatabase.getLoggedInUserLastName();
-
-        // in this example, a LineChart is initialized from xml
-        chart = (BarChart) findViewById(R.id.chart);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -184,43 +137,11 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         // initializing navigation menu
         setUpNavigationView();
 
-        //Test Chart ********************************************
-        testChart();
-
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
-    }
-
-    public void testChart()
-    {
-        setData(7);
-        chart.setFitBars(true);
-        chart.setScaleEnabled(false);
-        chart.getDescription().setEnabled(false);
-
-    }
-
-    private void setData(int count)
-    {
-        ArrayList<BarEntry> yVals = new ArrayList<>();
-
-        for(int i=0;i<count; i++)
-        {
-            int value = (int) (Math.random()*100);
-            yVals.add(new BarEntry(i, (int) value));
-        }
-
-        BarDataSet set = new BarDataSet(yVals, "Data Set");
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
-        set.setDrawValues(true);
-
-        BarData data = new BarData(set);
-        chart.setData(data);
-        chart.invalidate();
-        chart.animateY(1200);
     }
 
     private void loadNavHeader() {
@@ -425,7 +346,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(thomas.sullivan.videoshoppe.activity.Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // show menu only when home fragment is selected
@@ -455,4 +376,5 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
+
 }
