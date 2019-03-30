@@ -1,64 +1,42 @@
 package thomas.sullivan.videoshoppe.activity;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
-import android.database.Cursor;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.model.GradientColor;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 
-import thomas.sullivan.videoshoppe.activity.R;
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
 import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
 import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
-import thomas.sullivan.videoshoppe.other.CircleTransform;
+import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import java.util.Calendar;
 
@@ -69,50 +47,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     String lastName;
 
     BarChart chart;
-
-    Calendar calendar = new Calendar() {
-        @Override
-        protected void computeTime() {
-
-        }
-
-        @Override
-        protected void computeFields() {
-
-        }
-
-        @Override
-        public void add(int field, int amount) {
-
-        }
-
-        @Override
-        public void roll(int field, boolean up) {
-
-        }
-
-        @Override
-        public int getMinimum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getMaximum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getGreatestMinimum(int field) {
-            return 0;
-        }
-
-        @Override
-        public int getLeastMaximum(int field) {
-            return 0;
-        }
-    };
-
-
+    Calendar calendar;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
@@ -139,6 +74,21 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
+    // Calender information
+    private String currentDayString;
+    private int currentDayInt;
+    private int sundayCount;
+    private int mondayCount;
+    private int tuesdayCount;
+    private int wednesdayCount;
+    private int thursdayCount;
+    private int fridayCount;
+    private int saturdayCount;
+    private int thirtyDayCounter;
+    private int thirtyDayDisplay;
+    private int rentalsInDay;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +105,10 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         setSupportActionBar(toolbar);
 
         mHandler = new Handler();
+
+        //Calendar
+        calendar = Calendar.getInstance();
+        currentDayInt = calendar.get(Calendar.DAY_OF_WEEK);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -184,9 +138,9 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         // initializing navigation menu
         setUpNavigationView();
 
-        //Test Chart ********************************************
-        testChart();
-
+        //Creates Bar Graph
+        createChart();
+        
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
@@ -194,30 +148,174 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    public void testChart()
+
+    public void createChart()
     {
+        calendarRun();
         setData(7);
         chart.setFitBars(true);
         chart.setScaleEnabled(false);
         chart.getDescription().setEnabled(false);
+        chart.setHighlightPerTapEnabled(false);
+        chart.setHighlightPerDragEnabled(false);
 
+    }
+
+    public void calendarRun()
+    {
+        //Sets currentDay to the day of the week
+        switch(currentDayInt)
+        {
+            case 1:
+                currentDayString = "Sunday";
+                sundayCount = 0;
+                sundayCount += rentalsInDay;
+                break;
+            case 2:
+                currentDayString = "Monday";
+                mondayCount = 0;
+                mondayCount += rentalsInDay;
+                break;
+            case 3:
+                currentDayString = "Tuesday";
+                tuesdayCount = 0;
+                tuesdayCount += rentalsInDay;
+                break;
+            case 4:
+                currentDayString = "Wednesday";
+                wednesdayCount = 0;
+                wednesdayCount += rentalsInDay;
+                break;
+            case 5:
+                currentDayString = "Thursday";
+                thursdayCount = 0;
+                thursdayCount += rentalsInDay;
+                break;
+            case 6:
+                currentDayString = "Friday";
+                fridayCount = 0;
+                fridayCount += rentalsInDay;
+                break;
+            case 7:
+                currentDayString = "Saturday";
+                saturdayCount = 0;
+                saturdayCount += rentalsInDay;
+                break;
+            default:
+                currentDayString = "INVALID";
+                break;
+        }
     }
 
     private void setData(int count)
     {
+        int[] intArray = new int[7];
+        String[] dayNames = new String[7];
         ArrayList<BarEntry> yVals = new ArrayList<>();
+
+        int tempDate = currentDayInt;
+        String tempDay = "";
+        int arrayCounter = 0;
+        boolean isFinished = false;
+
+        while(isFinished == false)
+        {
+            int numberToAdd = -1;
+            switch(tempDate)
+            {
+                case 1:
+                    tempDay = "Sun";
+                    numberToAdd = sundayCount;
+                    break;
+                case 2:
+                    tempDay = "Mon";
+                    numberToAdd = mondayCount;
+                    break;
+                case 3:
+                    tempDay = "Tues";
+                    numberToAdd = tuesdayCount;
+                    break;
+                case 4:
+                    tempDay = "Wed";
+                    numberToAdd = wednesdayCount;
+                    break;
+                case 5:
+                    tempDay = "Thurs";
+                    numberToAdd = thursdayCount;
+                    break;
+                case 6:
+                    tempDay = "Fri";
+                    numberToAdd = fridayCount;
+                    break;
+                case 7:
+                    tempDay = "Sat";
+                    numberToAdd = saturdayCount;
+                    break;
+            }
+
+
+            intArray[6 - arrayCounter] = numberToAdd;
+            dayNames[6 - arrayCounter] = tempDay;
+
+            dayNames[6] = "Today";
+
+            // controls day #s
+            if(tempDate == 1)
+            {
+                tempDate = 7;
+            } else {
+                tempDate--;
+            }
+
+            arrayCounter++;
+
+            if(arrayCounter == 7)
+            {
+                isFinished = true;
+            }
+        }
 
         for(int i=0;i<count; i++)
         {
-            int value = (int) (Math.random()*100);
+            int value = i+1;
             yVals.add(new BarEntry(i, (int) value));
         }
 
         BarDataSet set = new BarDataSet(yVals, "Data Set");
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        //  FORMATTING
+
+        set.setColors(ColorTemplate.VORDIPLOM_COLORS);
         set.setDrawValues(true);
 
+        set.setLabel("Movie Rentals");
+
+        //   END FORMATTING
+
         BarData data = new BarData(set);
+
+        //  FORMATTING
+        set.setHighlightEnabled(false);
+        data.setValueTextSize(16);
+        data.setValueFormatter(new IntValueFormatter());
+        set.setValueFormatter(new IntValueFormatter());
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setTextSize(14);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(dayNames));
+        xAxis.setDrawGridLines(false);
+
+        YAxis rightYAxis = chart.getAxisRight();
+        YAxis leftYAxis = chart.getAxisLeft();
+        leftYAxis.setDrawGridLines(false);
+        leftYAxis.setTextSize(14);
+        rightYAxis.setEnabled(false);
+
+        chart.setExtraOffsets(10, 10, 10, 10);
+        chart.getLegend().setEnabled(false);
+
+        //   END FORMATTING
+
         chart.setData(data);
         chart.invalidate();
         chart.animateY(1200);
