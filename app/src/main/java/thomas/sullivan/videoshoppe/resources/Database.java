@@ -105,7 +105,7 @@ public class Database extends SQLiteOpenHelper {
     public boolean searchUsername(String user)
     {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.query(USERS,COLUMNS,USERNAME + "=?",new String[] {user},null,null,null,null);
+        Cursor res = db.rawQuery("SELECT * FROM  USERS WHERE USERNAME= ? COLLATE NOCASE",new String[] {user});
         if(res.moveToFirst())
         {
             String testUsername = res.getString(3);
@@ -123,7 +123,7 @@ public class Database extends SQLiteOpenHelper {
     public boolean searchPassword(String user, String pass)
     {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.query(USERS,COLUMNS,USERNAME + "=?",new String[] {user},null,null,null,null);
+        Cursor res = db.rawQuery("SELECT * FROM  USERS WHERE USERNAME= ? COLLATE NOCASE",new String[] {user});
         if(res.moveToFirst())
         {
             String testPassword = res.getString(4);

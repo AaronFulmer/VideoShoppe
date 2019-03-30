@@ -48,12 +48,17 @@ public class LoginScreen extends AppCompatActivity {
 
                         boolean correctUsername = database.searchUsername(usernameEntry);
                         boolean correctPassword = database.searchPassword(usernameEntry,passwordEntry);
-                        if(correctUsername == true && correctPassword == true)
+                        if(correctUsername == true)
                         {
-                            toastMessage("Logging in...");
-                            openMainMenu();
+                            if(correctPassword == true)
+                            {
+                                toastMessage("Logging in...");
+                                openMainMenu();
+                            } else {
+                                toastMessage("Incorrect password, Try again!");
+                            }
                         } else {
-                            toastMessage("Incorrect username/password, Try again!");
+                            toastMessage("Incorrect username, Try again!");
                         }
 
                     }
