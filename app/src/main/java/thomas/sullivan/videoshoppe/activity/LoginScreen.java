@@ -9,10 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import thomas.sullivan.videoshoppe.activity.R;
+import thomas.sullivan.videoshoppe.resources.Database;
 
 public class LoginScreen extends AppCompatActivity {
 
-    UserDatabase usersDatabase;
+    Database database;
     EditText editUsername,editPassword;
     Button btnLogin;
     Button btnTest2;
@@ -21,7 +22,7 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-        usersDatabase = new UserDatabase(this);
+        database = new Database(this);
 
         editUsername = (EditText)findViewById(R.id.editText_Username);
         editPassword = (EditText)findViewById(R.id.editText_Password);
@@ -29,7 +30,7 @@ public class LoginScreen extends AppCompatActivity {
         btnTest2 = (Button)findViewById(R.id.button_test2);
 
         //Wipes database and adds admin user.
-        //usersDatabase.wipeDatabase();
+        //database.wipeDatabase();
 
         login();
 
@@ -45,8 +46,8 @@ public class LoginScreen extends AppCompatActivity {
                         String usernameEntry = editUsername.getText().toString();
                         String passwordEntry = editPassword.getText().toString();
 
-                        boolean correctUsername = usersDatabase.searchUsername(usernameEntry);
-                        boolean correctPassword = usersDatabase.searchPassword(usernameEntry,passwordEntry);
+                        boolean correctUsername = database.searchUsername(usernameEntry);
+                        boolean correctPassword = database.searchPassword(usernameEntry,passwordEntry);
                         if(correctUsername == true && correctPassword == true)
                         {
                             toastMessage("Logging in...");
@@ -78,7 +79,7 @@ public class LoginScreen extends AppCompatActivity {
     //Views database
     public void test2()
     {
-        String result = usersDatabase.debugger();
+        String result = database.debugger();
         toastMessage(result);
     }
 

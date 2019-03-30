@@ -55,6 +55,7 @@ import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
 import thomas.sullivan.videoshoppe.other.CircleTransform;
+import thomas.sullivan.videoshoppe.resources.Database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ import java.util.Calendar;
 public class Movies extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    UserDatabase usersDatabase;
+    Database database;
     String firstName;
     String lastName;
 
@@ -100,9 +101,9 @@ public class Movies extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        usersDatabase = new UserDatabase(this);
-        firstName = usersDatabase.getLoggedInUserFirstName();
-        lastName = usersDatabase.getLoggedInUserLastName();
+        database = new Database(this);
+        firstName = database.getLoggedInUserFirstName();
+        lastName = database.getLoggedInUserLastName();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -34,6 +34,7 @@ import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
 import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
+import thomas.sullivan.videoshoppe.resources.Database;
 import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import java.util.Calendar;
 
 public class Menu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    UserDatabase usersDatabase;
+    Database database;
     String firstName;
     String lastName;
 
@@ -94,11 +95,11 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        usersDatabase = new UserDatabase(this);
-        firstName = usersDatabase.getLoggedInUserFirstName();
-        lastName = usersDatabase.getLoggedInUserLastName();
+        database = new Database(this);
+        firstName = database.getLoggedInUserFirstName();
+        lastName = database.getLoggedInUserLastName();
 
-        // in this example, a LineChart is initialized from xml
+        // Bar Graph
         chart = (BarChart) findViewById(R.id.chart);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

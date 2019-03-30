@@ -1,4 +1,4 @@
-package thomas.sullivan.videoshoppe.activity;
+package thomas.sullivan.videoshoppe.resources;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class UserDatabase extends SQLiteOpenHelper {
+public class Database extends SQLiteOpenHelper {
 
-    public static final String USER_DATABASE = "userDatabase.db";
+    public static final String DATABASE = "database.db";
     public static final String USERS = "USERS";
     public static final String IDNUM = "ID";
     public static final String LAST_NAME = "LAST_NAME";
@@ -21,18 +21,16 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static String loggedInUserFirstName = "";
     public static String loggedInUserLastName = "";
 
-
     //Database Default Constructor
-    public UserDatabase(Context context)
+    public Database(Context context)
     {
-        super(context, USER_DATABASE, null, 1);
+        super(context, DATABASE, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-        createUser("ADMIN","ADMIN","ADMIN","ADMIN","ADMIN","YES");
 
     }
 
@@ -68,8 +66,8 @@ public class UserDatabase extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + USERS);
-        db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-        createUser("ADMIN","ADMIN","ADMIN","ADMIN","ADMIN","YES");
+        onCreate(db);
+        createUser("ADMIN","Doe","John","ADMIN","ADMIN","YES");
     }
 
     public String debugger()
