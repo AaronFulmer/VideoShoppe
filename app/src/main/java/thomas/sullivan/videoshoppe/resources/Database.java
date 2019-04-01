@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Database extends SQLiteOpenHelper {
 
     public static final String DATABASE = "database.db";
+
+    //User Database
     public static final String USERS = "USERS";
     public static final String IDNUM = "ID";
     public static final String LAST_NAME = "LAST_NAME";
@@ -17,7 +19,30 @@ public class Database extends SQLiteOpenHelper {
     public static final String PASSWORD = "PASSWORD";
     //Yes or No string values
     public static final String ADMIN = "ADMIN";
-    public static final String[] COLUMNS = {IDNUM,LAST_NAME,FIRST_NAME,USERNAME,PASSWORD,ADMIN};
+
+    //Movie Database
+    public static final String MOVIE_TABLE = "MOVIES";
+    public static final String MOVIE_ID = "MOVIE_ID";
+    public static final String TITLE = "TITLE";
+    public static final String DIRECTOR = "DIRECTOR";
+    public static final String ACTOR = "ACTORS";
+    public static final String RELEASE_DATE = "RELEASE_DATE";
+    public static final String RATINGS = "RATINGS";
+    public static final String RENTED_BY = "RENTED_BY";
+    public static final String RETURN_DATE = "RENTAL_DATE";
+
+    //Customer Database
+    public static final String CUSTOMER_TABLE = "CUSTOMERS";
+    public static final String FIRST_NAME_CUSTOMER = "FIRST_NAME";
+    public static final String LAST_NAME_CUSTOMER = "LAST_NAME";
+    public static final String ADDRESS = "ADDRESS";
+    public static final String EMAIL = "EMAIL";
+    public static final String PHONE_NUMBER = "PHONE_NUMBER";
+    public static final String DATE_OF_BIRTH = "DATE_OF_BIRTH";
+    public static final String CREDIT_CARD_NUMBER = "CREDIT_CARD_NUMBER";
+    public static final String EXPIRATION_DATE = "EXPIRATION_DATE";
+    public static final String CCV_NUMBER = "CCV_NUMBER";
+
     public static String loggedInUserFirstName = "";
     public static String loggedInUserLastName = "";
 
@@ -31,7 +56,8 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-
+        db.execSQL("CREATE TABLE "+MOVIE_TABLE+" (MOVIE_ID TEXT, TITLE TEXT, DIRECTOR TEXT, ACTOR TEXT, RELEASE_DATE TEXT, RATINGS TEXT, RENTED_BY TEXT, RETURN_DATE TEXT)");
+        db.execSQL("CREATE TABLE "+CUSTOMER_TABLE+" (FIRST_NAME_CUSTOMER TEXT, LAST_NAME_CUSTOMER TEXT, ADDRESS TEXT, EMAIL TEXT, PHONE_NUMBER TEXT, DATE_OF_BIRTH TEXT, CREDIT_CARD_NUMBER TEXT, EXPIRATION_DATE TEXT, CCV_NUMBER TEXT)");
     }
 
     @Override
@@ -39,6 +65,51 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS "+USERS);
         onCreate(db);
+    }
+
+    public boolean createMovie(String movieID, String title, String director, String actor, String releaseDate, String ratings, String rentedBy, String returnDate )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MOVIE_ID, movieID);
+        contentValues.put(TITLE, title);
+        contentValues.put(DIRECTOR, director);
+        contentValues.put(ACTOR, actor);
+        contentValues.put(RELEASE_DATE, releaseDate);
+        contentValues.put(RATINGS, ratings);
+        contentValues.put(RENTED_BY, rentedBy);
+        contentValues.put(RETURN_DATE, returnDate);
+        long result = db.insert(MOVIE_TABLE,null,contentValues);
+        if(result == -1)
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean createCustomer(String firstName, String lastName, String address, String email, String phoneNumber, String dob, String cardNumber, String expirationDate, String ccvNumber )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FIRST_NAME_CUSTOMER, firstName);
+        contentValues.put(LAST_NAME_CUSTOMER, lastName);
+        contentValues.put(ADDRESS, firstName);
+        contentValues.put(EMAIL, email);
+        contentValues.put(PHONE_NUMBER, phoneNumber);
+        contentValues.put(DATE_OF_BIRTH, dob);
+        contentValues.put(CREDIT_CARD_NUMBER, cardNumber);
+        contentValues.put(EXPIRATION_DATE, expirationDate);
+        contentValues.put(CCV_NUMBER, ccvNumber);
+        long result = db.insert(CUSTOMER_TABLE,null,contentValues);
+        if(result == -1)
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 
@@ -66,6 +137,8 @@ public class Database extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + MOVIE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CUSTOMER_TABLE);
         onCreate(db);
         createUser("ADMIN","Doe","John","ADMIN","ADMIN","YES");
     }
