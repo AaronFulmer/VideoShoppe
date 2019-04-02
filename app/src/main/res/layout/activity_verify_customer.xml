@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".verifyCustomer">
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="202dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="404dp"
+        android:layout_marginEnd="193dp"
+        android:layout_marginBottom="49dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/btnGetInfo"
+        android:layout_marginRight="193dp" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginStart="348dp"
+        android:layout_marginTop="51dp"
+        android:layout_marginBottom="77dp"
+        android:text="Current Rentals: "
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintEnd_toStartOf="@+id/txtRentals"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
+        android:layout_marginLeft="348dp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginStart="357dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="15dp"
+        android:text="Phone Number: "
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView15"
+        app:layout_constraintEnd_toStartOf="@+id/txtPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        android:layout_marginLeft="357dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginStart="213dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="287dp"
+        android:text="Customer ID: "
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView15"
+        app:layout_constraintEnd_toStartOf="@+id/txtCustID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="213dp"
+        android:layout_marginRight="21dp" />
+
+    <EditText
+        android:id="@+id/txtCustID"
+        android:layout_width="319dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginBottom="99dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/txtName"
+        app:layout_constraintEnd_toStartOf="@+id/btnGetInfo"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="20dp" />
+
+    <EditText
+        android:id="@+id/txtName"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="422dp"
+        android:layout_marginBottom="45dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/txtPhone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/btnGetInfo"
+        android:layout_marginRight="422dp"
+        android:layout_marginLeft="18dp" />
+
+    <EditText
+        android:id="@+id/txtPhone"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="424dp"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/txtRentals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/txtName"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="424dp" />
+
+    <EditText
+        android:id="@+id/txtRentals"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="427dp"
+        android:layout_marginBottom="201dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/txtPhone"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="427dp" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginStart="448dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="18dp"
+        android:text="Name: "
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView14"
+        app:layout_constraintEnd_toStartOf="@+id/txtName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCustID"
+        android:layout_marginLeft="448dp"
+        android:layout_marginRight="18dp" />
+
+    <Button
+        android:id="@+id/btnGetInfo"
+        android:layout_width="215dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="325dp"
+        android:layout_marginBottom="97dp"
+        android:text="Retrieve Information"
+        app:layout_constraintBottom_toTopOf="@+id/txtName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtCustID"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="43dp"
+        android:layout_marginRight="325dp" />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="202dp"
+        android:layout_height="77dp"
+        android:layout_marginStart="182dp"
+        android:layout_marginEnd="501dp"
+        android:layout_marginBottom="50dp"
+        android:text="Confirm Rental"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        android:layout_marginLeft="182dp"
+        android:layout_marginRight="501dp" />
+
+</android.support.constraint.ConstraintLayout>

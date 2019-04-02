@@ -21,7 +21,8 @@ public class MainMenu extends AppCompatActivity{
     Button btnCheckIn;
     Button btnCheckOut;
     Button btnDebug;
-    UserDatabase usersDatabase;
+    public static UserDatabase usersDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,14 @@ public class MainMenu extends AppCompatActivity{
         btnCheckIn = (Button)findViewById(R.id.button_check_in);
         btnCheckOut = (Button)findViewById(R.id.button_check_out);
         btnDebug = (Button)findViewById(R.id.button_debug);
-
+        usersDatabase = new UserDatabase(this);
+        boolean a = usersDatabase.createUser("Admin","Admin","Admin","Admin","Admin","yes");
+        if(a){
+            Toast.makeText(MainMenu.this,"User Inserted",Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(MainMenu.this,"Error Inserting",Toast.LENGTH_LONG).show();
+        }
         mainMenu();
 
     }
@@ -44,7 +52,7 @@ public class MainMenu extends AppCompatActivity{
 
     public void gotoCheckOut()
     {
-        Intent intent = new Intent(MainMenu.this, MainMenu.class);
+        Intent intent = new Intent(MainMenu.this, checkOutDvd.class);
         startActivity(intent);
     }
 

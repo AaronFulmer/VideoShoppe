@@ -12,6 +12,8 @@
         <activity android:name=".CheckIn">
         </activity>
         <activity android:name=".MainMenu" />
+        <activity android:name=".checkOutDvd" />
+        <activity android:name=".verifyCustomer" />
         <activity android:name=".LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

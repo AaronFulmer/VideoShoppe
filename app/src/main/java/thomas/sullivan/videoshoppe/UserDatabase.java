@@ -11,8 +11,8 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String USER_DATABASE = "userDatabase.db";
     public static final String USERS = "USERS";
     public static final String IDNUM = "ID";
-    public static final String LAST_NAME = "LAST NAME";
-    public static final String FIRST_NAME = "FIRST NAME";
+    public static final String LAST_NAME = "LAST_NAME";
+    public static final String FIRST_NAME = "FIRST_NAME";
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
     //Yes or No string values
@@ -29,7 +29,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-        createUser("Admin","Admin","Admin","Admin","Admin","yes");
+
     }
 
     @Override
@@ -112,8 +112,8 @@ public class UserDatabase extends SQLiteOpenHelper {
 
 
     public Cursor getAllData() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+USERS,null);
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = this.getReadableDatabase().rawQuery("select * from "+USERS,null);
         return res;
     }
 
