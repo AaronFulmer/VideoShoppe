@@ -29,6 +29,9 @@ public class LoginScreen extends AppCompatActivity {
         btnLogin = (Button)findViewById(R.id.button_Login);
         btnTest2 = (Button)findViewById(R.id.button_test2);
 
+        // Debugging fake data
+        //database.createUser("0001", "John", "Doe", "admin", "admin", "Y");
+
         //Wipes database and adds admin user.
         //database.wipeDatabase();
 

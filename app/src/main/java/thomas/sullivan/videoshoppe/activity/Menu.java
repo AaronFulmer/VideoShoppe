@@ -27,7 +27,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
 import thomas.sullivan.videoshoppe.fragment.CustomersFragment;

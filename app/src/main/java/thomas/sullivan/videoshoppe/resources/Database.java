@@ -8,51 +8,95 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper {
 
-    public static final String DATABASE = "database.db";
-    public static final String USERS = "USERS";
-    public static final String IDNUM = "ID";
-    public static final String LAST_NAME = "LAST_NAME";
-    public static final String FIRST_NAME = "FIRST_NAME";
-    public static final String USERNAME = "USERNAME";
-    public static final String PASSWORD = "PASSWORD";
+    private static final String database = "database.db";
+
+    private static final String employeeTable = "employee";
+    private static final String employeeID = "EmployeeID";            // Primary Key
+    private static final String employeeFirstName = "firstname";
+    private static final String employeeLastName = "lastname";
+    private static final String employeeEmail = "email";
+    private static final String employeePhoneNumber = "phonenumber";
+    private static final String employeeUserName = "username";
+    private static final String employeePassword = "password";
+    private static final String employeeAdmin = "admin";
+
+    private static final String customerTable = "customer";
+    private static final String customerID = "CustomerID";           // Primary Key
+    private static final String customerLastName = "lastname";
+    private static final String customerFirstName = "firstname";
+    private static final String customerEmail = "email";
+    private static final String customerCardNumber = "cardNumber";   // Foreign Key
+    private static final String customerPhoneNumber = "phoneNumber";
+
+    private static final String cardTable = "card";
+    private static final String cardNumber = "number";
+    private static final String cardExpDate = "expirationDate";
+    private static final String cardSecurityCode = "securityCode";
+    private static final String cardType = "cardType";
+
+    private static final String rentalTable = "rental";
+    private static final String rentalID = "rentalID";
+    private static final String rentalCustomerID = "rentalCustomerID";
+    private static final String rentalUPCCode = "UPCCode";             // Foreign Key
+    private static final String rentalReturnDate = "returnDate";
+    private static final String rentalPrice = "price";
+
+    private static final String dvdTable = "dvd";
+    private static final String dvdUPCCode = "UPCCode";                // Primary Key
+    private static final String dvdName = "name";
+    private static final String dvdReleaseDate = "releaseDate";
+    private static final String dvdDirector = "director";
+    private static final String dvdGenre = "genre";
+    private static final String dvdActors = "actors";
+    private static final String dvdCondition = "condition";
+
+    private static final String scheduleTable = "schedule";
+    private static final String scheduleDateAndTime = "DateAndTime";   // Primary Key
+    private static final String scheduleEmployeeId = "employeeID";     // Foreign Key
+    private static final String scheduleHours = "Hours";
     //Yes or No string values
-    public static final String ADMIN = "ADMIN";
-    public static final String[] COLUMNS = {IDNUM,LAST_NAME,FIRST_NAME,USERNAME,PASSWORD,ADMIN};
-    public static String loggedInUserFirstName = "";
-    public static String loggedInUserLastName = "";
+
+
 
     //Database Default Constructor
     public Database(Context context)
     {
-        super(context, DATABASE, null, 1);
+        super(context, database, null, 1);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db)
-    {
-        db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-
+    public void onCreate(SQLiteDatabase sqLiteDB) {
+        sqLiteDB.execSQL("CREATE TABLE " + employeeTable + " ("
+                + employeeID + " TEXT PRIMARY KEY, "
+                + employeeLastName + " TEXT, "
+                + employeeFirstName + " TEXT, "
+                + employeeEmail + " TEXT, "
+                + employeePhoneNumber + " TEXT, "
+                + employeeUserName + " TEXT, "
+                + employeePassword + " TEXT,"
+                + employeeAdmin + " BOOLEAN);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS "+USERS);
+        db.execSQL("DROP TABLE IF EXISTS "+employeeTable);
         onCreate(db);
     }
 
 
-    public boolean createUser(String ID, String lastName, String firstName, String username, String password, String admin )
+    public boolean createUser(String ID, String lastName, String firstName, String username,
+                              String password, Boolean admin )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(IDNUM, ID);
-        contentValues.put(LAST_NAME, lastName);
-        contentValues.put(FIRST_NAME, firstName);
-        contentValues.put(USERNAME, username);
-        contentValues.put(PASSWORD, password);
-        contentValues.put(ADMIN, admin);
-        long result = db.insert(USERS,null,contentValues);
+        contentValues.put(employeeID, ID);
+        contentValues.put(employeeLastName, lastName);
+        contentValues.put(employeeFirstName, firstName);
+        contentValues.put(employeeUserName, username);
+        contentValues.put(employeePassword, password);
+        contentValues.put(employeeAdmin, admin);
+        long result = db.insert(employeeTable,null,contentValues);
         if(result == -1)
         {
             return false;
