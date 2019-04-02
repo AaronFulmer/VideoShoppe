@@ -1,6 +1,7 @@
 package thomas.sullivan.videoshoppe.activity;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Handler;
@@ -41,7 +42,9 @@ import java.util.ArrayList;
 
 import java.util.Calendar;
 
-public class Menu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Menu extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
+        LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
+        CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
     Database database;
     String firstName;
@@ -138,9 +141,6 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
 
         // initializing navigation menu
         setUpNavigationView();
-
-        //Creates Bar Graph
-        createChart();
         
         if (savedInstanceState == null) {
             navItemIndex = 0;
@@ -553,5 +553,10 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

@@ -1,13 +1,17 @@
 package thomas.sullivan.videoshoppe.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import thomas.sullivan.videoshoppe.activity.LoginScreen;
 import thomas.sullivan.videoshoppe.activity.R;
 
 /**
@@ -59,6 +63,9 @@ public class LogoutFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Intent logout = new Intent(getActivity(), LoginScreen.class);
+        startActivity(logout);
+        Toast.makeText(getContext(),"Goodbye!",Toast.LENGTH_SHORT).show();
     }
 
     @Override

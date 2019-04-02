@@ -63,7 +63,7 @@ import java.util.List;
 
 import java.util.Calendar;
 
-public class Movies extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
+public class Inventory extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
         LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
         CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 

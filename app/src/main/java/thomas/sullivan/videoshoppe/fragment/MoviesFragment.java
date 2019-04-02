@@ -64,8 +64,10 @@ public class MoviesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Define the view
+        View view = inflater.inflate(R.layout.main_movies, container, false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movies, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

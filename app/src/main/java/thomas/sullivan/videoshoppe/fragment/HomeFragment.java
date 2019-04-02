@@ -1,5 +1,6 @@
 package thomas.sullivan.videoshoppe.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,8 +8,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import thomas.sullivan.videoshoppe.activity.R;
+import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +42,23 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    BarChart chart;
+    Calendar calendar;
+
+    // Calender information
+    private String currentDayString;
+    private int currentDayInt;
+    private int sundayCount;
+    private int mondayCount;
+    private int tuesdayCount;
+    private int wednesdayCount;
+    private int thursdayCount;
+    private int fridayCount;
+    private int saturdayCount;
+    private int thirtyDayCounter;
+    private int thirtyDayDisplay;
+    private int rentalsInDay;
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,13 +91,194 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //Calendar
+        calendar = Calendar.getInstance();
+        currentDayInt = calendar.get(Calendar.DAY_OF_WEEK);
+
+    }
+
+    public void createChart()
+    {
+        calendarRun();
+        setData(7);
+        chart.setFitBars(true);
+        chart.setScaleEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.setHighlightPerTapEnabled(false);
+        chart.setHighlightPerDragEnabled(false);
+
+    }
+
+    public void calendarRun()
+    {
+        //Sets currentDay to the day of the week
+        switch(currentDayInt)
+        {
+            case 1:
+                currentDayString = "Sunday";
+                sundayCount = 0;
+                sundayCount += rentalsInDay;
+                break;
+            case 2:
+                currentDayString = "Monday";
+                mondayCount = 0;
+                mondayCount += rentalsInDay;
+                break;
+            case 3:
+                currentDayString = "Tuesday";
+                tuesdayCount = 0;
+                tuesdayCount += rentalsInDay;
+                break;
+            case 4:
+                currentDayString = "Wednesday";
+                wednesdayCount = 0;
+                wednesdayCount += rentalsInDay;
+                break;
+            case 5:
+                currentDayString = "Thursday";
+                thursdayCount = 0;
+                thursdayCount += rentalsInDay;
+                break;
+            case 6:
+                currentDayString = "Friday";
+                fridayCount = 0;
+                fridayCount += rentalsInDay;
+                break;
+            case 7:
+                currentDayString = "Saturday";
+                saturdayCount = 0;
+                saturdayCount += rentalsInDay;
+                break;
+            default:
+                currentDayString = "INVALID";
+                break;
+        }
+    }
+
+    private void setData(int count)
+    {
+        int[] intArray = new int[7];
+        String[] dayNames = new String[7];
+        ArrayList<BarEntry> yVals = new ArrayList<>();
+
+        int tempDate = currentDayInt;
+        String tempDay = "";
+        int arrayCounter = 0;
+        boolean isFinished = false;
+
+        while(isFinished == false)
+        {
+            int numberToAdd = -1;
+            switch(tempDate)
+            {
+                case 1:
+                    tempDay = "Sun";
+                    numberToAdd = sundayCount;
+                    break;
+                case 2:
+                    tempDay = "Mon";
+                    numberToAdd = mondayCount;
+                    break;
+                case 3:
+                    tempDay = "Tues";
+                    numberToAdd = tuesdayCount;
+                    break;
+                case 4:
+                    tempDay = "Wed";
+                    numberToAdd = wednesdayCount;
+                    break;
+                case 5:
+                    tempDay = "Thurs";
+                    numberToAdd = thursdayCount;
+                    break;
+                case 6:
+                    tempDay = "Fri";
+                    numberToAdd = fridayCount;
+                    break;
+                case 7:
+                    tempDay = "Sat";
+                    numberToAdd = saturdayCount;
+                    break;
+            }
+
+
+            intArray[6 - arrayCounter] = numberToAdd;
+            dayNames[6 - arrayCounter] = tempDay;
+
+            dayNames[6] = "Today";
+
+            // controls day #s
+            if(tempDate == 1)
+            {
+                tempDate = 7;
+            } else {
+                tempDate--;
+            }
+
+            arrayCounter++;
+
+            if(arrayCounter == 7)
+            {
+                isFinished = true;
+            }
+        }
+
+        for(int i=0;i<count; i++)
+        {
+            int value = i+1;
+            yVals.add(new BarEntry(i, (int) value));
+        }
+
+        BarDataSet set = new BarDataSet(yVals, "Data Set");
+
+        //  FORMATTING
+
+        set.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        set.setDrawValues(true);
+
+        set.setLabel("Movie Rentals");
+
+        //   END FORMATTING
+
+        BarData data = new BarData(set);
+
+        //  FORMATTING
+        set.setHighlightEnabled(false);
+        data.setValueTextSize(16);
+        data.setValueFormatter(new IntValueFormatter());
+        set.setValueFormatter(new IntValueFormatter());
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setTextSize(14);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(dayNames));
+        xAxis.setDrawGridLines(false);
+
+        YAxis rightYAxis = chart.getAxisRight();
+        YAxis leftYAxis = chart.getAxisLeft();
+        leftYAxis.setDrawGridLines(false);
+        leftYAxis.setTextSize(14);
+        rightYAxis.setEnabled(false);
+
+        chart.setExtraOffsets(10, 10, 10, 10);
+        chart.getLegend().setEnabled(false);
+
+        //   END FORMATTING
+
+        chart.setData(data);
+        chart.invalidate();
+        chart.animateY(1200);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.main_home, container, false);
+        chart = (BarChart) view.findViewById(R.id.chart);
+        //Creates Bar Graph
+        createChart();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

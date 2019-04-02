@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="thomas.sullivan.videoshoppe.fragment.MoviesFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="25dp"
+        android:paddingTop="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="-1dp"
+        android:textAlignment="center"
+        android:textSize="24dp"
+        android:layout_weight="0"
+        android:textColor="@color/colorPrimary"
+        android:text="Temp Employees"/>
+
+
+
+</FrameLayout>
