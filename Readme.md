@@ -2,7 +2,7 @@
 
 Video Shoppe App created using Android Studio by Thomas Sullivan, Aaron Fulmer, Christian Guelledge, and Julia Rollins.
 
-Personal Notes for the home menu financial statistics
+# Personal Notes for the home menu financial statistics
 
 The general idea is to have a bar chart at the top of the home screen that 
 shows the amount of DVDs rented out each day over a 7 day period (Sunday-Saturday). 
