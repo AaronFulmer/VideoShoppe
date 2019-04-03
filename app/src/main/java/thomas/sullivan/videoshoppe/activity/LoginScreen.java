@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import thomas.sullivan.videoshoppe.activity.R;
-import thomas.sullivan.videoshoppe.resources.Database;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 public class LoginScreen extends AppCompatActivity {
 
-    Database database;
+    UserDatabase database;
     EditText editUsername,editPassword;
     Button btnLogin;
     Button btnTest2;
@@ -22,7 +22,7 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-        database = new Database(this);
+        database = new UserDatabase(this);
 
         editUsername = (EditText)findViewById(R.id.editText_Username);
         editPassword = (EditText)findViewById(R.id.editText_Password);
@@ -73,7 +73,7 @@ public class LoginScreen extends AppCompatActivity {
 
     public void openMainMenu()
     {
-        Intent intent = new Intent(LoginScreen.this, Menu.class);
+        Intent intent = new Intent(LoginScreen.this, MainMenu.class);
         startActivity(intent);
     }
 

@@ -1,6 +1,5 @@
 package thomas.sullivan.videoshoppe.activity;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,18 +33,13 @@ import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
 import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
-import thomas.sullivan.videoshoppe.resources.Database;
-import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
-import java.util.ArrayList;
-
-import java.util.Calendar;
-
-public class Menu extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
+public class MainMenu extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
         LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
         CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
-    Database database;
+    UserDatabase database;
     String firstName;
     String lastName;
 
@@ -82,7 +76,7 @@ public class Menu extends AppCompatActivity implements MoviesFragment.OnFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        database = new Database(this);
+        database = new UserDatabase(this);
         firstName = database.getLoggedInUserFirstName();
         lastName = database.getLoggedInUserLastName();
 
@@ -328,7 +322,7 @@ public class Menu extends AppCompatActivity implements MoviesFragment.OnFragment
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(MainMenu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         // show menu only when home fragment is selected
         if (navItemIndex == 0) {

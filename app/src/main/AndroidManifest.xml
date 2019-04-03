@@ -17,7 +17,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"></activity>
         <activity
-            android:name=".Menu"
+            android:name=".MainMenu"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"/>

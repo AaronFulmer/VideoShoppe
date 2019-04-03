@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import thomas.sullivan.videoshoppe.activity.R;
-import thomas.sullivan.videoshoppe.resources.Database;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 import thomas.sullivan.videoshoppe.resources.EmployeeItem;
 import thomas.sullivan.videoshoppe.resources.EmployeeListAdapter;
 import thomas.sullivan.videoshoppe.resources.MovieItem;
@@ -39,7 +39,7 @@ public class EmployeeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Database db;
+    UserDatabase db;
     ArrayList<EmployeeItem> employees;
     ListView employeeList;
 

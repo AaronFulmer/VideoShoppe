@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class Database extends SQLiteOpenHelper {
+public class UserDatabase extends SQLiteOpenHelper {
 
     private static final String DB_Name = "videoshoppe.db";
 
@@ -66,7 +66,7 @@ public class Database extends SQLiteOpenHelper {
 
 
     //Database Default Constructor
-    public Database(Context context)
+    public UserDatabase(Context context)
     {
         super(context, DB_Name, null, 1);
     }
