@@ -30,7 +30,7 @@ public class LoginScreen extends AppCompatActivity {
         btnTest2 = (Button)findViewById(R.id.button_test2);
 
         // Debugging fake data
-        //database.createUser("0001", "John", "Doe", "admin", "admin", "Y");
+        //database.createEmployee("0001", "John", "Doe", "admin", "admin", "Y");
 
         //Wipes database and adds admin user.
         //database.wipeDatabase();
@@ -48,22 +48,15 @@ public class LoginScreen extends AppCompatActivity {
 
                         String usernameEntry = editUsername.getText().toString();
                         String passwordEntry = editPassword.getText().toString();
+                        String userID = database.searchCredentials(usernameEntry, passwordEntry);
 
-                        boolean correctUsername = database.searchUsername(usernameEntry);
-                        boolean correctPassword = database.searchPassword(usernameEntry,passwordEntry);
-                        if(correctUsername == true)
-                        {
-                            if(correctPassword == true)
-                            {
-                                toastMessage("Logging in...");
-                                openMainMenu();
-                            } else {
-                                toastMessage("Incorrect password, Try again!");
-                            }
-                        } else {
-                            toastMessage("Incorrect username, Try again!");
+                        if(userID.equals("invalid")){
+                            toastMessage("Logging in.");
+                            openMainMenu();
                         }
-
+                        else{
+                            toastMessage("Invalid Credentials.");
+                        }
                     }
                 }
         );
@@ -83,6 +76,7 @@ public class LoginScreen extends AppCompatActivity {
         Intent intent = new Intent(LoginScreen.this, Menu.class);
         startActivity(intent);
     }
+
 
     //Views database
     public void test2()

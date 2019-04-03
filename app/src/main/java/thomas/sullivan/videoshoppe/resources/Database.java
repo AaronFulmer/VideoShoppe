@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final String database = "database.db";
+    private static final String DB_Name = "videoshoppe.db";
 
     private static final String employeeTable = "employee";
     private static final String employeeID = "EmployeeID";            // Primary Key
@@ -44,6 +44,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String dvdTable = "dvd";
     private static final String dvdUPCCode = "UPCCode";                // Primary Key
     private static final String dvdName = "name";
+    private static final String dvdID = "id";
     private static final String dvdReleaseDate = "releaseDate";
     private static final String dvdDirector = "director";
     private static final String dvdGenre = "genre";
@@ -54,14 +55,20 @@ public class Database extends SQLiteOpenHelper {
     private static final String scheduleDateAndTime = "DateAndTime";   // Primary Key
     private static final String scheduleEmployeeId = "employeeID";     // Foreign Key
     private static final String scheduleHours = "Hours";
-    //Yes or No string values
+
+    private static final String actorsTable = "actors";
+    private static final String actorsName = "name";
+    private static final String actorsMovieID = "movie_id";
+
+    private static final String financeTable = "finances";
+    private static final String financeExpenditures = "expenditures";
 
 
 
     //Database Default Constructor
     public Database(Context context)
     {
-        super(context, database, null, 1);
+        super(context, DB_Name, null, 1);
     }
 
     @Override
@@ -73,20 +80,66 @@ public class Database extends SQLiteOpenHelper {
                 + employeeEmail + " TEXT, "
                 + employeePhoneNumber + " TEXT, "
                 + employeeUserName + " TEXT, "
-                + employeePassword + " TEXT,"
-                + employeeAdmin + " BOOLEAN);");
+                + employeePassword + " TEXT, "
+                + employeeAdmin + " INTEGER);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + customerTable + " ("
+                + customerID + " TEXT PRIMARY KEY, "
+                + customerLastName + " TEXT, "
+                + customerFirstName + " TEXT, "
+                + customerPhoneNumber + " TEXT, "
+                + customerEmail + " TEXT, "
+                + customerCardNumber + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + dvdTable + " ("
+                + dvdUPCCode + " TEXT PRIMARY KEY, "
+                + dvdID + " TEXT, "
+                + dvdName + " TEXT, "
+                + dvdDirector + " TEXT, "
+                + dvdCondition + " TEXT, "
+                + dvdReleaseDate + " TEXT, "
+                + dvdGenre + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + cardTable + " ("
+                + cardNumber + " TEXT PRIMARY KEY, "
+                + cardSecurityCode + " TEXT, "
+                + cardExpDate + " TEXT, "
+                + cardType + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + rentalTable + " ("
+                + rentalID + " TEXT PRIMARY KEY, "
+                + rentalCustomerID + " TEXT, "
+                + rentalUPCCode + " TEXT, "
+                + rentalReturnDate + " TEXT, "
+                + rentalPrice + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + scheduleTable + " ("
+                + scheduleDateAndTime + " DATE PRIMARY KEY, "
+                + scheduleEmployeeId + " TEXT, "
+                + scheduleHours + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + actorsTable + " ("
+                + actorsMovieID + " TEXT, "
+                + actorsName + " TEXT);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS "+employeeTable);
+        db.execSQL("DROP TABLE IF EXISTS "+customerTable);
+        db.execSQL("DROP TABLE IF EXISTS "+actorsTable);
+        db.execSQL("DROP TABLE IF EXISTS "+dvdTable);
+        db.execSQL("DROP TABLE IF EXISTS "+rentalTable);
+        db.execSQL("DROP TABLE IF EXISTS "+scheduleTable);
+        db.execSQL("DROP TABLE IF EXISTS "+cardTable);
+
         onCreate(db);
     }
 
 
-    public boolean createUser(String ID, String lastName, String firstName, String username,
-                              String password, Boolean admin )
+    public boolean createEmployee(String ID, String lastName, String firstName, String username,
+                                  String password, String admin )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -96,7 +149,7 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(employeeUserName, username);
         contentValues.put(employeePassword, password);
         contentValues.put(employeeAdmin, admin);
-        long result = db.insert(employeeTable,null,contentValues);
+        long result = db.insert(DB_Name,null,contentValues);
         if(result == -1)
         {
             return false;
@@ -109,121 +162,77 @@ public class Database extends SQLiteOpenHelper {
     public void wipeDatabase()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + employeeTable);
         onCreate(db);
-        createUser("ADMIN","Doe","John","ADMIN","ADMIN","YES");
     }
 
-    public String debugger()
-    {
-        String result = "";
-        String query = "SELECT * FROM "+USERS;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
-        while(cursor.moveToNext())
-        {
-            String id = cursor.getString(0);
-            String lastname = cursor.getString(1);
-            String firstname = cursor.getString(2);
-            String username = cursor.getString(3);
-            String password = cursor.getString(4);
-            String admin = cursor.getString(5);
-
-            result += id+" "+lastname+" "+firstname+" "+username+" "+password+" "+admin;
-        }
-        cursor.close();
-        db.close();
-        return result;
-    }
-
-    public String getLoggedInUserFirstName()
-    {
-        return loggedInUserFirstName;
-    }
-
-    public String getLoggedInUserLastName()
-    {
-        return loggedInUserLastName;
-    }
-
-    public boolean searchUsername(String user)
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM  USERS WHERE USERNAME= ? COLLATE NOCASE",new String[] {user});
-        if(res.moveToFirst())
-        {
-            String testUsername = res.getString(3);
-            if(user.equalsIgnoreCase(testUsername))
-            {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public boolean searchPassword(String user, String pass)
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM  USERS WHERE USERNAME= ? COLLATE NOCASE",new String[] {user});
-        if(res.moveToFirst())
-        {
-            String testPassword = res.getString(4);
-            if(testPassword.equals(pass))
-            {
-                loggedInUserFirstName = res.getString(2);
-                loggedInUserLastName = res.getString(1);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-
-    public boolean isAdmin(String employeeID)
+    public String searchCredentials(String user, String pass)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select ADMIN from "+USERS+" where ID="+employeeID,null);
-        String adminCheck = res.getString(0);
-        if(adminCheck.equalsIgnoreCase("Yes"))
-        {
-            return true;
-        } else {
-            return false;
+
+        String[] columns = {employeeID};
+        String where = employeePassword + " = ? and " + employeeUserName + " = ?";
+        String[] args = new String[]{pass, user};
+        Cursor c = db.query(employeeTable, columns, where, args, null, null, null);
+
+        if(c.getCount() == 0){
+            return "invalid";
         }
+        return c.getString(0);
     }
 
 
-    public Cursor getAllData() {
+    public boolean isAdmin(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] columns = {employeeAdmin};
+        String where = employeeID + " = ?";
+        String[] args = new String[]{id};
+        Cursor res = db.query(employeeTable, columns, where, args, null, null, null);
+        Boolean adminCheck = res.getInt(0) > 0;
+        return adminCheck;
+    }
+
+
+    public Cursor getAllEmployeeData() {
         //SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = this.getReadableDatabase().rawQuery("select * from "+USERS,null);
+        Cursor res = this.getReadableDatabase().rawQuery("select * from "+employeeTable,null);
         return res;
     }
 
-    //Updates User's data in the database
-    public boolean updateUser(String ID, String lastName, String firstName, String username, String password, String admin ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ID, ID);
-        contentValues.put(LAST_NAME, lastName);
-        contentValues.put(FIRST_NAME, firstName);
-        contentValues.put(USERNAME, username);
-        contentValues.put(PASSWORD, password);
-        contentValues.put(ADMIN, admin);
-        db.update(USERS, contentValues, "ID = ?",new String[] { ID });
+    public Boolean insertIntoTable(String table, String[] columns, String[] values){
+        ContentValues c = new ContentValues();
+        for(int a = 0; a < values.length; a++){
+            c.put(columns[a], values[a]);
+        }
+        long result = this.getWritableDatabase().insert(table, null, c);
+        if(result == -1){
+            return false;
+        }
         return true;
     }
 
+    //Updates User's data in the database
+    public boolean updateEmployee(String table, String ID, String lastName, String firstName,
+                                  String username, String password, String admin ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(employeeLastName, lastName);
+        contentValues.put(employeeFirstName, firstName);
+        contentValues.put(employeeUserName, username);
+        contentValues.put(employeePassword, password);
+        contentValues.put(employeeAdmin, admin);
+        db.update(table, contentValues, employeeID + " = ?",new String[] { ID });
+        return true;
+    }
+
+
+
     //returns true if the user is deleted; Returns false if user is non-existent.
-    public boolean deleteUser (String id)
+    public boolean removeEmployee (String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        int numberOfDeletedRows = db.delete(USERS, "ID = ?",new String[] {id});
+        int numberOfDeletedRows = db.delete(employeeTable, employeeID + " = ?",new String[] {id});
 
         if(numberOfDeletedRows > 0) {
             return true;
@@ -234,5 +243,70 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
+    public static String getEmployeeTable() {
+        return employeeTable;
+    }
 
+    public static String getCustomerTable() {
+        return customerTable;
+    }
+
+    public static String getCardTable() {
+        return cardTable;
+    }
+
+    public static String getRentalTable() {
+        return rentalTable;
+    }
+
+    public static String getDvdTable() {
+        return dvdTable;
+    }
+
+    public static String getScheduleTable() {
+        return scheduleTable;
+    }
+
+    public static String getActorsTable() {
+        return actorsTable;
+    }
+
+    public static String[] getEmployeeAttributes(){
+        return new String[]{employeeID, employeeLastName, employeeFirstName, employeeEmail,
+                employeePhoneNumber, employeeUserName, employeePassword, employeeAdmin};
+    }
+
+    public static String[] getCustomerAttributes(){
+        return new String[]{customerID, customerLastName, customerFirstName, customerPhoneNumber,
+                customerEmail, customerCardNumber};
+    }
+
+    public static String[] getDvdAttributes(){
+        return new String[]{dvdUPCCode, dvdID, dvdName, dvdDirector, dvdCondition, dvdReleaseDate,
+                dvdGenre};
+    }
+
+    public static String[] getCardAttributes(){
+        return new String[]{cardNumber, cardSecurityCode, cardExpDate, cardType};
+    }
+
+    public static String[] getRentalAttributes(){
+        return new String[]{scheduleDateAndTime, scheduleEmployeeId, scheduleHours};
+    }
+
+    public static String[] getActorsAttributes(){
+        return new String[]{actorsMovieID, actorsName};
+    }
+
+    public String getLoggedInUserFirstName(){
+        return employeeFirstName;
+    }
+
+    public String getLoggedInUserLastName(){
+        return employeeLastName;
+    }
+
+    public String debugger(){
+        return "temp";
+    }
 }

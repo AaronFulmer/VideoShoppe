@@ -1,6 +1,7 @@
 package thomas.sullivan.videoshoppe.activity;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
@@ -62,8 +63,9 @@ import java.util.List;
 
 import java.util.Calendar;
 
-public class Movies extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Movies extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
+        LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
+        CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
     Database database;
     String firstName;
@@ -378,4 +380,13 @@ public class Movies extends AppCompatActivity
         return false;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }

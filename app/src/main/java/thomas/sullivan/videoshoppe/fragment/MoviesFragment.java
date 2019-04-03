@@ -7,6 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import thomas.sullivan.videoshoppe.activity.R;
 
@@ -59,13 +66,41 @@ public class MoviesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Define the view
+        View view = inflater.inflate(R.layout.main_movies, container, false);
+
+        final ArrayList<String> movies = new ArrayList<>();
+        movies.add("Jimmy");
+        movies.add("Rob");
+        movies.add("Todd");
+        movies.add("Jimbo");
+        movies.add("Austin");
+        movies.add("Beth");
+        movies.add("Rudy");
+        movies.add("John");
+        movies.add("Lauren");
+
+
+        ListView listView = view.findViewById(R.id.movieList);
+        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,movies);
+        ArrayAdapter<String> listViewAdapterTwo = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_2,movies);
+        listView.setAdapter(listViewAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "You clicked on "+movies.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movies, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

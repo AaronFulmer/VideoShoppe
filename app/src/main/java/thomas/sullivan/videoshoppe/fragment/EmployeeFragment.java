@@ -1,14 +1,25 @@
 package thomas.sullivan.videoshoppe.fragment;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import thomas.sullivan.videoshoppe.activity.R;
+import thomas.sullivan.videoshoppe.resources.Database;
+import thomas.sullivan.videoshoppe.resources.EmployeeItem;
+import thomas.sullivan.videoshoppe.resources.EmployeeListAdapter;
+import thomas.sullivan.videoshoppe.resources.MovieItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +38,10 @@ public class EmployeeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    Database db;
+    ArrayList<EmployeeItem> employees;
+    ListView employeeList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,13 +74,41 @@ public class EmployeeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Define the view
+        View view = inflater.inflate(R.layout.main_employees, container, false);
+
+        ArrayList image_details = getListData();
+        final ListView lv1 = (ListView) view.findViewById(R.id.employee_list);
+        lv1.setAdapter(new EmployeeListAdapter(getContext(),image_details));
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = lv1.getItemAtPosition(position);
+                EmployeeItem employeeData = (EmployeeItem) o;
+                Toast.makeText(getActivity(), "Selected: "+ employeeData, Toast.LENGTH_SHORT);
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_employee, container, false);
+        return view;
+    }
+
+    private ArrayList getListData(){
+        ArrayList<EmployeeItem> results = new ArrayList<EmployeeItem>();
+        EmployeeItem employeeData = new EmployeeItem();
+        employeeData.setFirstName("TestFirstName");
+        employeeData.setLastName("TestLastName");
+        employeeData.setUsername("TestUsername");
+        employeeData.setUserID("AUF1029");
+        employeeData.setAdmin("Yes");
+        results.add(employeeData);
+        return results;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
