@@ -24,15 +24,16 @@ public class LoginScreen extends AppCompatActivity {
         setContentView(R.layout.activity_login_screen);
         database = new UserDatabase(this);
 
+
         editUsername = (EditText)findViewById(R.id.editText_Username);
         editPassword = (EditText)findViewById(R.id.editText_Password);
         btnLogin = (Button)findViewById(R.id.button_Login);
         btnTest2 = (Button)findViewById(R.id.button_test2);
 
         // Debugging fake data
-        //database.createEmployee("0001", "John", "Doe", "admin", "admin", "Y");
+        //database.createEmployee("0001", "John", "Doe", "admin", "admin", true);
 
-        //Wipes database and adds admin user.
+        //Wipes database
         //database.wipeDatabase();
 
         login();
@@ -51,11 +52,11 @@ public class LoginScreen extends AppCompatActivity {
                         String userID = database.searchCredentials(usernameEntry, passwordEntry);
 
                         if(userID.equals("invalid")){
-                            toastMessage("Logging in.");
-                            openMainMenu();
+                            toastMessage("Invalid Credentials.");
                         }
                         else{
-                            toastMessage("Invalid Credentials.");
+                            toastMessage("Logging in.");
+                            openMainMenu();
                         }
                     }
                 }

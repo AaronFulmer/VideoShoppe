@@ -150,7 +150,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
 
     public boolean createEmployee(String ID, String lastName, String firstName, String username,
-                                  String password, String admin )
+                                  String password, boolean admin )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -159,8 +159,8 @@ public class UserDatabase extends SQLiteOpenHelper {
         contentValues.put(employeeFirstName, firstName);
         contentValues.put(employeeUserName, username);
         contentValues.put(employeePassword, password);
-        contentValues.put(employeeAdmin, admin);
-        long result = db.insert(DB_Name,null,contentValues);
+        contentValues.put(employeeAdmin, (admin)? 1 : 0);
+        long result = db.insert(employeeTable,null,contentValues);
         if(result == -1)
         {
             return false;
@@ -184,7 +184,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         String[] args = new String[]{pass, user};
         Cursor c = db.query(employeeTable, columns, where, args, null, null, null);
 
-        if(c.getCount() == 0){
+        if(!c.moveToFirst()){
             return "invalid";
         }
         return c.getString(0);
