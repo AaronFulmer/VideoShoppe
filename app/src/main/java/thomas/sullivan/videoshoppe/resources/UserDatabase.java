@@ -66,7 +66,8 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String financeTransactionId = "transaction_number";
     private static final String financeTransactionDate = "date";
 
-
+    private static String currentEmployeeFirstName = "";
+    private static String currentEmployeeLastName = "";
 
     //Database Default Constructor
     public UserDatabase(Context context)
@@ -310,12 +311,30 @@ public class UserDatabase extends SQLiteOpenHelper {
                 financeExpenditures, financeProfit};
     }
 
+    public void setCurrentUser(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {employeeFirstName, employeeLastName};
+        String where = employeeID + " = ?";
+        String[] args = {id};
+        Cursor c = db.query(employeeTable, columns, where, args, null, null, null);
+
+        if(c.moveToFirst()){
+            currentEmployeeLastName = c.getString(0);
+            currentEmployeeFirstName = c.getString(1);
+        }
+        else{
+            currentEmployeeLastName = "";
+            currentEmployeeFirstName = "ERROR";
+        }
+    }
+
     public String getLoggedInUserFirstName(){
-        return employeeFirstName;
+        return currentEmployeeFirstName;
     }
 
     public String getLoggedInUserLastName(){
-        return employeeLastName;
+        return currentEmployeeLastName;
     }
 
     public String debugger(){

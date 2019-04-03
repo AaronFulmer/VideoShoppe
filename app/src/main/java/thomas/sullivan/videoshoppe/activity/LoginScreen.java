@@ -56,6 +56,7 @@ public class LoginScreen extends AppCompatActivity {
                         }
                         else{
                             toastMessage("Logging in.");
+                            database.setCurrentUser(userID);
                             openMainMenu();
                         }
                     }
