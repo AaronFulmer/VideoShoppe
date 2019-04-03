@@ -44,11 +44,10 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String dvdTable = "dvd";
     private static final String dvdUPCCode = "UPCCode";                // Primary Key
     private static final String dvdName = "name";
-    private static final String dvdID = "id";
+    private static final String dvdMovieID = "id";
     private static final String dvdReleaseDate = "releaseDate";
     private static final String dvdDirector = "director";
     private static final String dvdGenre = "genre";
-    private static final String dvdActors = "actors";
     private static final String dvdCondition = "condition";
 
     private static final String scheduleTable = "schedule";
@@ -62,6 +61,10 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     private static final String financeTable = "finances";
     private static final String financeExpenditures = "expenditures";
+    private static final String financeRevenue = "revenue";
+    private static final String financeProfit = "profit";
+    private static final String financeTransactionId = "transaction_number";
+    private static final String financeTransactionDate = "date";
 
 
 
@@ -93,7 +96,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         sqLiteDB.execSQL("CREATE TABLE " + dvdTable + " ("
                 + dvdUPCCode + " TEXT PRIMARY KEY, "
-                + dvdID + " TEXT, "
+                + dvdMovieID + " TEXT, "
                 + dvdName + " TEXT, "
                 + dvdDirector + " TEXT, "
                 + dvdCondition + " TEXT, "
@@ -121,6 +124,13 @@ public class UserDatabase extends SQLiteOpenHelper {
         sqLiteDB.execSQL("CREATE TABLE " + actorsTable + " ("
                 + actorsMovieID + " TEXT, "
                 + actorsName + " TEXT);");
+
+        sqLiteDB.execSQL("CREATE TABLE " + financeTable + " ("
+                + financeTransactionId + " TEXT PRIMARY KEY, "
+                + financeTransactionDate + " DATE, "
+                + financeRevenue + " DOUBLE, "
+                + financeExpenditures + " DOUBLE, "
+                + financeProfit + " DOUBLE);");
     }
 
     @Override
@@ -133,6 +143,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+rentalTable);
         db.execSQL("DROP TABLE IF EXISTS "+scheduleTable);
         db.execSQL("DROP TABLE IF EXISTS "+cardTable);
+        db.execSQL("DROP TABLE IF EXISTS "+financeTable);
 
         onCreate(db);
     }
@@ -161,9 +172,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public void wipeDatabase()
     {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + employeeTable);
-        onCreate(db);
+        onUpgrade(this.getWritableDatabase(), 1, 1);
     }
 
     public String searchCredentials(String user, String pass)
@@ -212,7 +221,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         return true;
     }
 
-    //Updates User's data in the database
+    //Updates employee's data in the database
     public boolean updateEmployee(String table, String ID, String lastName, String firstName,
                                   String username, String password, String admin ) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -225,8 +234,6 @@ public class UserDatabase extends SQLiteOpenHelper {
         db.update(table, contentValues, employeeID + " = ?",new String[] { ID });
         return true;
     }
-
-
 
     //returns true if the user is deleted; Returns false if user is non-existent.
     public boolean removeEmployee (String id)
@@ -282,7 +289,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     public static String[] getDvdAttributes(){
-        return new String[]{dvdUPCCode, dvdID, dvdName, dvdDirector, dvdCondition, dvdReleaseDate,
+        return new String[]{dvdUPCCode, dvdMovieID, dvdName, dvdDirector, dvdCondition, dvdReleaseDate,
                 dvdGenre};
     }
 
@@ -296,6 +303,11 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public static String[] getActorsAttributes(){
         return new String[]{actorsMovieID, actorsName};
+    }
+
+    public static String[] getFinanceAttributes(){
+        return new String[]{financeTransactionId, financeTransactionDate, financeRevenue,
+                financeExpenditures, financeProfit};
     }
 
     public String getLoggedInUserFirstName(){
