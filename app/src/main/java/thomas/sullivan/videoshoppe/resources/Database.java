@@ -27,9 +27,9 @@ public class Database extends SQLiteOpenHelper {
     public static final String DIRECTOR = "DIRECTOR";
     public static final String ACTOR = "ACTORS";
     public static final String RELEASE_DATE = "RELEASE_DATE";
+    public static final String GENRE = "GENRE";
     public static final String RATINGS = "RATINGS";
     public static final String RENTED_BY = "RENTED_BY";
-    public static final String RETURN_DATE = "RENTAL_DATE";
 
     //Customer Database
     public static final String CUSTOMER_TABLE = "CUSTOMERS";
@@ -56,7 +56,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE "+USERS+" (ID TEXT, LAST_NAME TEXT, FIRST_NAME TEXT, USERNAME TEXT, PASSWORD TEXT, ADMIN TEXT)");
-        db.execSQL("CREATE TABLE "+MOVIE_TABLE+" (MOVIE_ID TEXT, TITLE TEXT, DIRECTOR TEXT, ACTOR TEXT, RELEASE_DATE TEXT, RATINGS TEXT, RENTED_BY TEXT, RETURN_DATE TEXT)");
+        db.execSQL("CREATE TABLE "+MOVIE_TABLE+" (MOVIE_ID TEXT, TITLE TEXT, DIRECTOR TEXT, ACTOR TEXT, RELEASE_DATE TEXT, RATINGS TEXT, GENRE TEXT, RENTED_BY TEXT)");
         db.execSQL("CREATE TABLE "+CUSTOMER_TABLE+" (FIRST_NAME_CUSTOMER TEXT, LAST_NAME_CUSTOMER TEXT, ADDRESS TEXT, EMAIL TEXT, PHONE_NUMBER TEXT, DATE_OF_BIRTH TEXT, CREDIT_CARD_NUMBER TEXT, EXPIRATION_DATE TEXT, CCV_NUMBER TEXT)");
     }
 
@@ -67,7 +67,7 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean createMovie(String movieID, String title, String director, String actor, String releaseDate, String ratings, String rentedBy, String returnDate )
+    public boolean createMovie(String movieID, String title, String director, String actor, String releaseDate, String ratings, String genre, String rentedBy)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -77,8 +77,8 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(ACTOR, actor);
         contentValues.put(RELEASE_DATE, releaseDate);
         contentValues.put(RATINGS, ratings);
+        contentValues.put(GENRE, genre);
         contentValues.put(RENTED_BY, rentedBy);
-        contentValues.put(RETURN_DATE, returnDate);
         long result = db.insert(MOVIE_TABLE,null,contentValues);
         if(result == -1)
         {
@@ -228,9 +228,9 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getAllData() {
-        //SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = this.getReadableDatabase().rawQuery("select * from "+USERS,null);
+    public Cursor getEmployeeData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.query(USERS, null, null, null, null, null, null, null);
         return res;
     }
 
