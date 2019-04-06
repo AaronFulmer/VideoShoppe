@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class UserDatabase extends SQLiteOpenHelper {
 
     private static final String DB_Name = "videoshoppe.db";
@@ -279,6 +282,8 @@ public class UserDatabase extends SQLiteOpenHelper {
         return actorsTable;
     }
 
+    public static String getFinanceTable(){ return financeTable; }
+
     public static String[] getEmployeeAttributes(){
         return new String[]{employeeID, employeeLastName, employeeFirstName, employeeEmail,
                 employeePhoneNumber, employeeUserName, employeePassword, employeeAdmin};
@@ -339,5 +344,157 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public String debugger(){
         return "temp";
+    }
+
+
+
+    /* This method is meant to search the database for some given terms that are passed in as arguments.
+     *
+     * Variables:
+     *      a: acts as a counter for the number of rows in the cursor to make sure that all rows are checked for each test
+     *      b: acts as a counter for the number of columns in the cursor to make sure that the columns are copied in their entirety
+     *      d: acts as a counter for the number of words in the search terms to ensure every word is searched for
+     *
+     *  There are 3 tests that are run:
+     *      1: Test if the current string from the cursor matches the search terms
+     *      2: Test if the current string from the cursor contains an individual term
+     *      3: Test if the current string from the cursor contains an individual term if all spaces are removed
+     *
+     *  Whenever a match is found, the row index is pushed to the Stack so that subsequent tests shouldn't return the same rows repeatedly.
+     *  The tests are structured in such a way to prioritize better matches at the top of the list.
+     *
+     *  The tests are first run using the whole search terms string, then the string is broken up
+     *  into its individual words and the tests are run again using each individual word to search with.
+     */
+    public ArrayList<ArrayList<String>> searchDvd(String terms, String groupBy) {
+
+        SQLiteDatabase db = this.getReadableDatabase();                             //  Get a readable database
+        Cursor c = db.rawQuery("select * from " + dvdTable, null);  //  Get the column names (mainly to get the number of columns)
+        String[] columns = c.getColumnNames();
+        int target = c.getColumnIndex(groupBy);
+        ArrayList<ArrayList<String>> list = new ArrayList<>();
+        int rows = c.getCount();
+        Stack used = new Stack();
+
+        //  Copy the column names into the first row of the ArrayList
+        list.add(new ArrayList<String>());
+        for(int a = 0; a < columns.length; a++){
+            list.get(0).add(columns[a]);
+        }
+
+        // If the cursor has any results in it...
+        if (c.moveToFirst()) {
+
+            // Begin by testing that the datum is equal to the search terms
+            for (int a = 0; a < rows; a++) {
+                String data = c.getString(target);                                //  Get the new string from the cursor
+                if (data.equals(terms) && !used.contains(a)) {
+                    used.push(a);                                                 //  Push the row index into the stack to mark as used
+                    list.add(new ArrayList<String>());                            //  Prep the list for new entry
+                    for (int b = 0; b < columns.length; b++) {
+                        list.get(list.size() - 1).add(c.getString(b));            //  Copy the contents of the current row of the cursor into the list
+                    }
+                }
+
+                c.moveToNext();                                                   //  Move to the next row in the cursor
+            }
+
+            c.moveToFirst();                                                      //  Reset the cursor
+
+            // Next, check if datum contains the search terms as a whole string
+            for (int a = 0; a < rows; a++) {
+                String data = c.getString(target);                                //  Get the new string from the cursor
+                if (data.contains(terms) && !used.contains(a)) {
+                    used.push(a);                                                 //  Push the row index into the stack to mark as used
+                    list.add(new ArrayList<String>());                            //  Prep the list for new entry
+                    for (int b = 0; b < columns.length; b++) {
+                        list.get(list.size() - 1).add(c.getString(b));            //  Copy the contents of the current row of the cursor into the list
+                    }
+                }
+                c.moveToNext();                                                   //  Move to the next row of the cursor
+            }
+
+            c.moveToFirst();                                                      //  Reset the cursor
+
+            // Next, check if datum (excluding spaces) contains the terms as a whole string
+            for (int a = 0; a < rows; a++) {
+                String data = c.getString(target);                                //  Get the new string from the cursor
+                data.replaceAll("\\s", "");                      //  Remove the spaces from the string
+                if (data.contains(terms) && !used.contains(a)) {
+                    used.push(a);                                                //  Push the row index into the stack to mark as used
+                    list.add(new ArrayList<String>());                           //  Prep the list for new entry
+                    for (int b = 0; b < columns.length; b++) {
+                        list.get(list.size() - 1).add(c.getString(b));           //  Copy the contents of the current row of the cursor into the list
+                    }
+                }
+                c.moveToNext();                                                  //  Move to the next row of the cursor
+            }
+
+            c.moveToFirst();                                                     //  Reset the cursor
+
+            /*
+             *  The following loops run the previous tests again using the individual words as search terms
+             *  in and of themselves
+             */
+
+            String[] termList = terms.split(" ");                          //  Split the search term string into separate words
+
+            // Begin with looking for perfectly matching strings
+            // If any are found, push the index to the stack and copy all data into the list
+            for (int d = 0; d < termList.length; d++) {
+                for (int a = 0; a < rows; a++) {
+                    String data = c.getString(target);
+                    if (data.equals(termList[d]) && !used.contains(a)) {
+                        used.push(a);
+                        list.add(new ArrayList<String>());
+                        for (int b = 0; b < columns.length; b++) {
+                            list.get(list.size() - 1).add(c.getString(b));
+                        }
+                    }
+
+                    c.moveToNext();
+                }
+            }
+
+            c.moveToFirst();
+
+            // Next, check if data has any of the terms as full words
+            for (int d = 0; d < termList.length; d++) {
+                for (int a = 0; a < rows; a++) {
+                    String data = c.getString(target);
+                    if (data.contains(termList[d]) && !used.contains(a)) {
+                        used.push(a);
+                        list.add(new ArrayList<String>());
+                        for (int b = 0; b < columns.length; b++) {
+                            list.get(list.size() - 1).add(c.getString(b));
+                        }
+                    }
+                    c.moveToNext();
+                }
+            }
+
+            c.moveToFirst();
+
+            // Next, check if data (excluding spaces) contains the terms at all
+            for (int d = 0; d < termList.length; d++) {
+                for (int a = 0; a < rows; a++) {
+                    String data = c.getString(target);
+                    data.replaceAll("\\s", "");
+                    if (data.contains(termList[d]) && !used.contains(a)) {
+                        used.push(a);
+                        list.add(new ArrayList<String>());
+                        for (int b = 0; b < columns.length; b++) {
+                            list.get(list.size() - 1).add(c.getString(b));
+                        }
+                    }
+                    c.moveToNext();
+                }
+
+            c.moveToFirst();
+
+            }
+
+        }
+        return list;
     }
 }
