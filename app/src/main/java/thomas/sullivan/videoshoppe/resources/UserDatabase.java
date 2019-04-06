@@ -366,15 +366,15 @@ public class UserDatabase extends SQLiteOpenHelper {
      *  The tests are first run using the whole search terms string, then the string is broken up
      *  into its individual words and the tests are run again using each individual word to search with.
      */
-    public ArrayList<ArrayList<String>> searchDvd(String terms, String groupBy) {
+    public ArrayList<ArrayList<String>> searchDvd(String terms, String filter) {
 
-        SQLiteDatabase db = this.getReadableDatabase();                             //  Get a readable database
-        Cursor c = db.rawQuery("select * from " + dvdTable, null);  //  Get the column names (mainly to get the number of columns)
-        String[] columns = c.getColumnNames();
-        int target = c.getColumnIndex(groupBy);
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        int rows = c.getCount();
-        Stack used = new Stack();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from " + dvdTable, null);   //  Get a readable database
+        String[] columns = c.getColumnNames();                                      //  Get the column names (mainly to get the number of columns)
+        int target = c.getColumnIndex(filter);                                      //  Get the target column index from what the search is filtered by
+        ArrayList<ArrayList<String>> list = new ArrayList<>();                      //  Results will be stored in a 2D ArrayList of Strings
+        int rows = c.getCount();                                                    //  Get the number of rows in the cursor
+        Stack used = new Stack();                                                   //  Make a stack to hold the used row indices
 
         //  Copy the column names into the first row of the ArrayList
         list.add(new ArrayList<String>());
