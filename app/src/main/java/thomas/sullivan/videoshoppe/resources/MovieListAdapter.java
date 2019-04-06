@@ -46,10 +46,10 @@ public class MovieListAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.row_movie_layout, null);
             holder = new ViewHolder();
             holder.titleView = (TextView) convertView.findViewById(R.id.title);
-            holder.directorView = (TextView) convertView.findViewById(R.id.director);
-            holder.actorsView = (TextView) convertView.findViewById(R.id.actor);
-            holder.genreView = (TextView) convertView.findViewById(R.id.genre);
-            holder.releaseDateView = (TextView) convertView.findViewById(R.id.releaseDate);
+           // holder.directorView = (TextView) convertView.findViewById(R.id.director);
+           // holder.actorsView = (TextView) convertView.findViewById(R.id.actor);
+           // holder.genreView = (TextView) convertView.findViewById(R.id.genre);
+          //  holder.releaseDateView = (TextView) convertView.findViewById(R.id.releaseDate);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

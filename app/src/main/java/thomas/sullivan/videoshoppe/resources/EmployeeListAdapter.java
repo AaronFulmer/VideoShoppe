@@ -1,83 +1,67 @@
 package thomas.sullivan.videoshoppe.resources;
 
+
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableList;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import thomas.sullivan.videoshoppe.activity.Employees;
 import thomas.sullivan.videoshoppe.activity.R;
 
-public class EmployeeListAdapter extends BaseAdapter {
-
-    private ArrayList<EmployeeItem> employeeItems;
-    private LayoutInflater layoutInflater;
-
-    public EmployeeListAdapter(Context aContext, ArrayList<EmployeeItem> aEmployeeItems)
-    {
-        this.employeeItems = aEmployeeItems;
-        layoutInflater = LayoutInflater.from(aContext);
-    }
+import static com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition.GROUP;
 
 
-    @Override
-    public int getCount() {
-        return employeeItems.size();
+public class EmployeeListAdapter extends ExpandableRecyclerViewAdapter<EmployeeParentHolder, EmployeeChildHolder> {
+
+    public EmployeeListAdapter(List<? extends ExpandableGroup> groups) {
+        super(groups);
     }
 
     @Override
-    public Object getItem(int position) {
-        return employeeItems.get(position);
+    public EmployeeParentHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_employee_layout, parent, false);
+        return new EmployeeParentHolder(view);
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public EmployeeChildHolder onCreateChildViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_employee_layout_expandable, parent, false);
+        return new EmployeeChildHolder(view);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if(convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.row_employee_layout, null);
-            holder = new ViewHolder();
-            holder.firstNameView = (TextView) convertView.findViewById(R.id.firstName);
-            holder.lastNameView = (TextView) convertView.findViewById(R.id.lastName);
-            holder.usernameView = (TextView) convertView.findViewById(R.id.username);
-            holder.adminView = (TextView) convertView.findViewById(R.id.admin);
-            holder.userIDView = (TextView) convertView.findViewById(R.id.userID);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+    public void onBindChildViewHolder(EmployeeChildHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
+        final EmployeeChild employee = ((EmployeeItem) group).getItems().get(childIndex);
+        holder.onBind(employee);
+    }
+
+    @Override
+    public void onBindGroupViewHolder(EmployeeParentHolder holder, int flatPosition, ExpandableGroup group) {
+        holder.setName(group);
+    }
+
+    @Override
+    public void onGroupExpanded(int positionStart, int itemCount) {
+        super.onGroupExpanded(positionStart, itemCount);
+        for (int i = getItemCount()-1; i >= 0; i--) {
+            if(i <= getItemCount()) {
+                if(i != positionStart-1) {
+                    if (getItemViewType(i) == GROUP && isGroupExpanded(i)) {
+                        toggleGroup(i);
+                    }
+                }
+            }
         }
-
-        holder.firstNameView.setText(employeeItems.get(position).getFirstName());
-        holder.lastNameView.setText(employeeItems.get(position).getLastName());
-        holder.userIDView.setText("Employee ID: "+employeeItems.get(position).getUserID());
-        holder.usernameView.setText("Username: "+employeeItems.get(position).getUsername());
-
-        if(employeeItems.get(position).getAdmin().equalsIgnoreCase("yes"))
-        {
-            holder.adminView.setText("Admin: No");
-        }else {
-            holder.adminView.setText("Admin: Yes");
-        }
-
-        return convertView;
     }
 
-    static class ViewHolder {
-        TextView firstNameView;
-        TextView lastNameView;
-        TextView usernameView;
-        TextView adminView;
-        TextView userIDView;
-    }
 }

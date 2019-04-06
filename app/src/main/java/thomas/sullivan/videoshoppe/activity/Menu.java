@@ -1,8 +1,8 @@
 package thomas.sullivan.videoshoppe.activity;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,14 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
@@ -35,18 +27,13 @@ import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
 import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
-import thomas.sullivan.videoshoppe.resources.Database;
-import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
-
-import java.util.ArrayList;
-
-import java.util.Calendar;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 public class Menu extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
         LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
         CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
-    Database database;
+    UserDatabase database;
     String firstName;
     String lastName;
 
@@ -83,7 +70,7 @@ public class Menu extends AppCompatActivity implements MoviesFragment.OnFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        database = new Database(this);
+        database = new UserDatabase(this);
         firstName = database.getLoggedInUserFirstName();
         lastName = database.getLoggedInUserLastName();
 
@@ -331,10 +318,7 @@ public class Menu extends AppCompatActivity implements MoviesFragment.OnFragment
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.main, (android.view.Menu) menu);
-        }
+
         return true;
     }
 
@@ -345,13 +329,7 @@ public class Menu extends AppCompatActivity implements MoviesFragment.OnFragment
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);
     }
 
     @Override

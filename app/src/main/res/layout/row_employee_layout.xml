@@ -1,53 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:orientation="horizontal"
-android:padding="5dip" >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:orientation="horizontal"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/colorAccent">
 
-<TextView
-    android:id="@+id/firstName"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textStyle="bold"
-    android:textColor="#343434"
-    android:textSize="16sp" />
-
-<TextView
-    android:id="@+id/lastName"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dip"
-    android:textColor="#343434"
-    android:textSize="16sp" />
+    <ImageView
+        android:id="@+id/list_employee_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/baseline_keyboard_arrow_down_black_24"
+        android:tint="@color/colorPrimary" />
 
     <TextView
-        android:id="@+id/userID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:textColor="#343434"
-        android:textSize="12sp" />
-
-
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:textColor="#343434"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/admin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:textColor="#343434"
-        android:textSize="12sp" />
-
+        android:id="@+id/list_editable_employeeName"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:text="Sullivan, Thomas"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp" />
 
 </LinearLayout>

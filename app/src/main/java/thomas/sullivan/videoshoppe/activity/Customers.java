@@ -1,73 +1,38 @@
 package thomas.sullivan.videoshoppe.activity;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
-import android.database.Cursor;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.model.GradientColor;
-import com.github.mikephil.charting.utils.MPPointF;
 
-import thomas.sullivan.videoshoppe.activity.R;
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
 import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
 import thomas.sullivan.videoshoppe.fragment.InventoryFragment;
 import thomas.sullivan.videoshoppe.fragment.EmployeeFragment;
 import thomas.sullivan.videoshoppe.fragment.LogoutFragment;
-import thomas.sullivan.videoshoppe.other.CircleTransform;
-import thomas.sullivan.videoshoppe.resources.Database;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Calendar;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 public class Customers extends AppCompatActivity implements MoviesFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
         LogoutFragment.OnFragmentInteractionListener,InventoryFragment.OnFragmentInteractionListener, EmployeeFragment.OnFragmentInteractionListener,
         CustomersFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
-    Database database;
+    UserDatabase database;
     String firstName;
     String lastName;
 
@@ -103,7 +68,7 @@ public class Customers extends AppCompatActivity implements MoviesFragment.OnFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        database = new Database(this);
+        database = new UserDatabase(this);
         firstName = database.getLoggedInUserFirstName();
         lastName = database.getLoggedInUserLastName();
 
@@ -367,10 +332,6 @@ public class Customers extends AppCompatActivity implements MoviesFragment.OnFra
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

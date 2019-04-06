@@ -8,12 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import thomas.sullivan.videoshoppe.activity.R;
-import thomas.sullivan.videoshoppe.resources.Database;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 public class LoginScreen extends AppCompatActivity {
 
-    Database database;
+    UserDatabase database;
     EditText editUsername,editPassword;
     Button btnLogin;
     Button btnTest2;
@@ -22,14 +21,13 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-        database = new Database(this);
+        database = new UserDatabase(this);
 
         editUsername = (EditText)findViewById(R.id.editText_Username);
         editPassword = (EditText)findViewById(R.id.editText_Password);
         btnLogin = (Button)findViewById(R.id.button_Login);
         btnTest2 = (Button)findViewById(R.id.button_test2);
 
-        //Wipes database and adds admin user.
         //database.wipeDatabase();
 
         login();
@@ -46,19 +44,14 @@ public class LoginScreen extends AppCompatActivity {
                         String usernameEntry = editUsername.getText().toString();
                         String passwordEntry = editPassword.getText().toString();
 
-                        boolean correctUsername = database.searchUsername(usernameEntry);
-                        boolean correctPassword = database.searchPassword(usernameEntry,passwordEntry);
-                        if(correctUsername == true)
+                        if(database.searchCredentials(usernameEntry,passwordEntry))
                         {
-                            if(correctPassword == true)
-                            {
-                                toastMessage("Logging in...");
-                                openMainMenu();
-                            } else {
-                                toastMessage("Incorrect password, Try again!");
-                            }
-                        } else {
-                            toastMessage("Incorrect username, Try again!");
+                            toastMessage("Logging in.");
+                            database.setCurrentUser(usernameEntry);
+                            openMainMenu();
+                        }
+                        else{
+                            toastMessage("Invalid Credentials.");
                         }
 
                     }
