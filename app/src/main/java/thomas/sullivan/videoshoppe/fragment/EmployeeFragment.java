@@ -301,95 +301,105 @@ public class EmployeeFragment extends Fragment implements SearchView.OnQueryText
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            final AlertDialog.Builder editorEmployeeDialog = new AlertDialog.Builder(getContext());
-                            final View view3 = getLayoutInflater().inflate(R.layout.edit_employee_editor, null);
-                            editorEmployeeDialog.setView(view3);
-                            final AlertDialog editor = editorEmployeeDialog.create();
-                            editor.show();
-
-                            final EditText tempFirstName = (EditText) view3.findViewById(R.id.edit_employee_firstName);
-                            final EditText tempLastName = (EditText) view3.findViewById(R.id.edit_employee_lastName);
-                            final EditText tempEmail = (EditText) view3.findViewById(R.id.edit_employee_email);
-                            final EditText tempPhoneNumber = (EditText) view3.findViewById(R.id.edit_employee_phoneNumber);
-                            final EditText tempUsername = (EditText) view3.findViewById(R.id.edit_employee_username);
-                            final EditText tempPassword = (EditText) view3.findViewById(R.id.edit_employee_password);
-                            final CheckBox tempAdmin = (CheckBox) view3.findViewById(R.id.edit_employee_admin);
-
-                            String[] employeInformation = db.employeeRowReturn(tempID2.getText().toString());
-                            tempLastName.setHint(employeInformation[0]);
-                            tempFirstName.setHint(employeInformation[1]);
-                            tempUsername.setHint(employeInformation[2]);
-                            tempPassword.setHint(employeInformation[3]);
-                            if(employeInformation[4].equalsIgnoreCase("1"))
+                            if(db.isAdmin(tempID2.getText().toString()))
                             {
-                                tempAdmin.setChecked(true);
-                            }
-                            tempEmail.setHint(employeInformation[5]);
-                            tempPhoneNumber.setHint(employeInformation[6]);
+                                final AlertDialog.Builder editorEmployeeDialog = new AlertDialog.Builder(getContext());
+                                final View view3 = getLayoutInflater().inflate(R.layout.edit_employee_editor, null);
+                                editorEmployeeDialog.setView(view3);
+                                final AlertDialog editor = editorEmployeeDialog.create();
+                                editor.show();
 
-                            Button editorConfirm = (Button) view3.findViewById(R.id.edit_employee_confirm);
-                            Button editorCancel = (Button) view3.findViewById(R.id.edit_employee_cancel);
+                                final EditText tempFirstName = (EditText) view3.findViewById(R.id.edit_employee_firstName);
+                                final EditText tempLastName = (EditText) view3.findViewById(R.id.edit_employee_lastName);
+                                final EditText tempEmail = (EditText) view3.findViewById(R.id.edit_employee_email);
+                                final EditText tempPhoneNumber = (EditText) view3.findViewById(R.id.edit_employee_phoneNumber);
+                                final EditText tempUsername = (EditText) view3.findViewById(R.id.edit_employee_username);
+                                final EditText tempPassword = (EditText) view3.findViewById(R.id.edit_employee_password);
+                                final CheckBox tempAdmin = (CheckBox) view3.findViewById(R.id.edit_employee_admin);
 
-                            editorConfirm.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if(!tempFirstName.getText().toString().isEmpty() &&  !tempLastName.getText().toString().isEmpty() &&
-                                            !tempEmail.getText().toString().isEmpty() && !tempPhoneNumber.getText().toString().isEmpty() && !tempUsername.getText().toString().isEmpty() &&
-                                            !tempPassword.getText().toString().isEmpty())
+                                Button editorConfirm = (Button) view3.findViewById(R.id.edit_employee_confirm);
+                                Button editorCancel = (Button) view3.findViewById(R.id.edit_employee_cancel);
+
+                                String[] employeInformation = db.employeeRowReturn(tempID2.getText().toString());
+                                if(employeInformation[0] != null)
+                                {
+                                    tempLastName.setHint(employeInformation[0]);
+                                    tempFirstName.setHint(employeInformation[1]);
+                                    tempUsername.setHint(employeInformation[2]);
+                                    tempPassword.setHint(employeInformation[3]);
+                                    if(employeInformation[4].equalsIgnoreCase("1"))
                                     {
-                                        if(db.removeEmployee(tempID2.getText().toString()))
+                                        tempAdmin.setChecked(true);
+                                    }
+                                    tempEmail.setHint(employeInformation[5]);
+                                    tempPhoneNumber.setHint(employeInformation[6]);
+                                }
+
+                                editorConfirm.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if(!tempFirstName.getText().toString().isEmpty() &&  !tempLastName.getText().toString().isEmpty() &&
+                                                !tempEmail.getText().toString().isEmpty() && !tempPhoneNumber.getText().toString().isEmpty() && !tempUsername.getText().toString().isEmpty() &&
+                                                !tempPassword.getText().toString().isEmpty())
                                         {
-                                            if(tempAdmin.isChecked())
+                                            if(db.removeEmployee(tempID2.getText().toString()))
                                             {
-                                                if(db.createEmployee(tempID2.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),
-                                                        tempPassword.getText().toString(),1,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                                if(tempAdmin.isChecked())
                                                 {
-                                                    Toast.makeText(getContext(),"Employee Updated.",Toast.LENGTH_SHORT).show();
-                                                    editor.dismiss();
-                                                    dialog.dismiss();
-                                                    refreshList();
+                                                    if(db.createEmployee(tempID2.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),
+                                                            tempPassword.getText().toString(),1,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                                    {
+                                                        Toast.makeText(getContext(),"Employee Updated.",Toast.LENGTH_SHORT).show();
+                                                        editor.dismiss();
+                                                        dialog.dismiss();
+                                                        refreshList();
+                                                    } else {
+                                                        Toast.makeText(getContext(),"Employee Update Failed.",Toast.LENGTH_SHORT).show();
+                                                        editor.dismiss();
+                                                        dialog.dismiss();
+                                                        refreshList();
+                                                    }
                                                 } else {
-                                                    Toast.makeText(getContext(),"Employee Update Failed.",Toast.LENGTH_SHORT).show();
-                                                    editor.dismiss();
-                                                    dialog.dismiss();
-                                                    refreshList();
+                                                    if(db.createEmployee(tempID2.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),
+                                                            tempPassword.getText().toString(),0,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                                    {
+                                                        Toast.makeText(getContext(),"Employee Updated.",Toast.LENGTH_SHORT).show();
+                                                        editor.dismiss();
+                                                        dialog.dismiss();
+                                                        refreshList();
+                                                    } else {
+                                                        Toast.makeText(getContext(),"Employee Update Failed.",Toast.LENGTH_SHORT).show();
+                                                        editor.dismiss();
+                                                        dialog.dismiss();
+                                                        refreshList();
+                                                    }
                                                 }
                                             } else {
-                                                if(db.createEmployee(tempID2.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),
-                                                        tempPassword.getText().toString(),0,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
-                                                {
-                                                    Toast.makeText(getContext(),"Employee Updated.",Toast.LENGTH_SHORT).show();
-                                                    editor.dismiss();
-                                                    dialog.dismiss();
-                                                    refreshList();
-                                                } else {
-                                                    Toast.makeText(getContext(),"Employee Update Failed.",Toast.LENGTH_SHORT).show();
-                                                    editor.dismiss();
-                                                    dialog.dismiss();
-                                                    refreshList();
-                                                }
+                                                dialog.dismiss();
+                                                Toast.makeText(getContext(),"ERROR: Invalid Employee ID", Toast.LENGTH_SHORT).show();
                                             }
-                                        } else {
-                                            dialog.dismiss();
-                                            Toast.makeText(getContext(),"ERROR: Invalid Employee ID", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            Toast.makeText(getContext(),"Text Fields CANNOT be empty.",Toast.LENGTH_SHORT).show();
+
                                         }
-                                     }else {
-                                        Toast.makeText(getContext(),"Text Fields CANNOT be empty.",Toast.LENGTH_SHORT).show();
-
                                     }
-                                }
-                            });
+                                });
 
-                            editorCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                                editorCancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
-                                    editor.dismiss();
-                                    dialog.dismiss();
-                                    Toast.makeText(getContext(),"Canceled.", Toast.LENGTH_SHORT).show();
-                                    refreshList();
-                                }
-                            });
+                                        editor.dismiss();
+                                        dialog.dismiss();
+                                        Toast.makeText(getContext(),"Canceled.", Toast.LENGTH_SHORT).show();
+                                        refreshList();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(getContext(),"ERROR: Invalid Employee ID", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                                refreshList();
+                            }
                         }
                     });
 
