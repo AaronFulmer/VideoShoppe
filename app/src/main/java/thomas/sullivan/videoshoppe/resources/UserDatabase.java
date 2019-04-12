@@ -501,6 +501,11 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     /*
     *  Search Database Method
+    *       The idea is that the function checks for perfect matches in the database first, then uses a
+    *       brute force string matching algorithm to find the highest number of common characters between
+    *       the search terms and the string from the database. It then adds them to an arraylist after
+    *       sorting them based on number of common characters.
+    *
     *  - Retrieve entire database in the form of a single cursor
     *  - Check each row of the targeted filter for a perfect match of the search terms
     *       - push matches to stack to mark row number as used
