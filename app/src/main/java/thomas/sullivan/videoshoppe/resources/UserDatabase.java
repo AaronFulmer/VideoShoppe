@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 public class UserDatabase extends SQLiteOpenHelper {
@@ -366,7 +367,7 @@ public class UserDatabase extends SQLiteOpenHelper {
      *  The tests are first run using the whole search terms string, then the string is broken up
      *  into its individual words and the tests are run again using each individual word to search with.
      */
-    public ArrayList<ArrayList<String>> searchDvd(String terms, String filter) {
+    public ArrayList<ArrayList<String>> searchDvdv1(String terms, String filter) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from " + dvdTable, null);   //  Get a readable database
@@ -497,4 +498,66 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    public ArrayList<ArrayList<String>> searchDatabase(String terms, String filter){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from " + dvdTable, null);   //  Get a readable database
+        String[] columns = c.getColumnNames();                                      //  Get the column names (mainly to get the number of columns)
+        int target = c.getColumnIndex(filter);                                      //  Get the target column index from what the search is filtered by
+        ArrayList<ArrayList<String>> list = new ArrayList<>();                      //  Results will be stored in a 2D ArrayList of Strings
+        int rows = c.getCount();                                                    //  Get the number of rows in the cursor
+        Stack used = new Stack();                                                   //  Make a stack to hold the used row indices
+
+        if(!c.moveToFirst()){
+            return list;
+        }
+
+        for(int a = 0; a < rows; a++){
+            String test = c.getString(target);
+            if(test.contains(terms)){
+                used.push(a);
+                list.add(new ArrayList<String>());
+                for(int b = 0; b < columns.length - 1; b++){
+                    list.get(list.size() - 1).add(c.getString(b));
+                }
+            }
+            c.moveToNext();
+        }
+        c.moveToFirst();
+        int[][] chars = new int[rows][2];
+        for(int a = 0; a < rows; a++){
+            chars[a][0] = a;
+            if(!used.contains(a)){
+                String test = c.getString(target);
+                for(int b = 0; b < test.length() - terms.length(); b++){
+                    for(int d = 0; d < terms.length(); d++){
+                        if(test.charAt(d) == terms.charAt(d)){
+                            chars[a][1]++;
+                        }
+                    }
+                }
+            }
+            c.moveToNext();
+        }
+        c.moveToFirst();
+        c.move(chars[0][0]);
+        Arrays.sort(chars);
+        list.add(new ArrayList<String>());
+        for(int a = 0; a < columns.length; a++){
+            list.get(list.size() - 1).add(c.getString(a));
+        }
+
+        for(int a = 1; a < rows; a++){
+            int offset = chars[a][0] - chars[a-1][0];
+            c.move(offset);
+            list.add(new ArrayList<String>());
+            for(int b = 0; b < columns.length; b++){
+                list.get(list.size() - 1).add(c.getString(b));
+            }
+        }
+
+        return list;
+    }
+
 }
