@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="thomas.sullivan.videoshoppe.fragment.EmployeeFragment">
 
@@ -25,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
+            android:layout_marginBottom="15dp"
             android:orientation="horizontal"
             android:weightSum="100">
 
@@ -36,37 +38,15 @@
                 android:layout_marginTop="5dp"
                 android:iconifiedByDefault="false"
                 android:queryHint="Search Employees"
-                android:layout_weight="25"/>
+                android:layout_weight="35"/>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <Spinner
+                android:id="@+id/employeeFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="100"
-                android:layout_weight="75">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Filters:"
-                    android:textStyle="bold"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16dp" />
-
-
-                <Spinner
-                    android:id="@+id/employeeFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:layout_weight="50"
-                    android:padding="3dp"></Spinner>
-
-
-            </LinearLayout>
-
+                android:layout_gravity="left|bottom"
+                android:spinnerMode="dropdown"
+                android:padding="3dp"></Spinner>
 
         </LinearLayout>
 
