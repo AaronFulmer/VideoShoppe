@@ -553,13 +553,14 @@ public class UserDatabase extends SQLiteOpenHelper {
                 String test = c.getString(target);
                 for (int e = 0; e < terms.length; e++) {
                     for (int b = 0; b < test.length() - terms[e].length(); b++) {
+                        commonChars = 0;
                         for (int d = 0; d < terms[e].length(); d++) {
                             if (test.charAt(d+b) == terms[e].charAt(d)) {
                                 commonChars++;
                             }
                         }
+                        if (commonChars > chars[1][a]) chars[1][a] = commonChars;
                     }
-                    if (commonChars > chars[1][a]) chars[1][a] = commonChars;
                 }
             }
             c.moveToNext();
