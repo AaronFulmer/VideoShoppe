@@ -5,30 +5,5 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context="thomas.sullivan.videoshoppe.fragment.MoviesFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Employee List"
-            android:gravity="center"
-            android:textSize="24dp"
-            android:layout_margin="10dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/employee_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:divider="#FF0000"
-            android:dividerHeight="1dp"/>
-
-    </LinearLayout>
-
-
 
 </FrameLayout>

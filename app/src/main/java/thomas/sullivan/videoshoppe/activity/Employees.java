@@ -90,7 +90,6 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        addEmployee = (MenuItem) findViewById(R.id.action_add_employee);
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);

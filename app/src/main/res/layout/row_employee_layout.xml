@@ -9,25 +9,18 @@
     android:layout_marginTop="10dp"
     android:background="@color/colorAccent">
 
-    <ImageView
-        android:id="@+id/list_employee_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:layout_marginRight="6dp"
-        android:src="@drawable/baseline_keyboard_arrow_down_black_24"
-        android:tint="@color/colorPrimary" />
-
     <TextView
-        android:id="@+id/list_editable_employeeName"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:id="@+id/employeeListHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:gravity="center_vertical"
+        android:textSize="24dp"
         android:textStyle="bold"
-        android:text="Sullivan, Thomas"
-        android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+        android:maxLines="1"
+        android:text="Test Header"
+        android:paddingBottom="6dp"
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
