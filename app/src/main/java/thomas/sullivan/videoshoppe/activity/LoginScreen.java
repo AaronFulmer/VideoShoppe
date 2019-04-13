@@ -26,7 +26,6 @@ public class LoginScreen extends AppCompatActivity {
         editUsername = (EditText)findViewById(R.id.editText_Username);
         editPassword = (EditText)findViewById(R.id.editText_Password);
         btnLogin = (Button)findViewById(R.id.button_Login);
-        btnTest2 = (Button)findViewById(R.id.button_test2);
 
         //database.wipeDatabase();
 
@@ -57,15 +56,6 @@ public class LoginScreen extends AppCompatActivity {
                     }
                 }
         );
-
-        btnTest2.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        test2();
-                    }
-                }
-        );
     }
 
     public void openMainMenu()
@@ -73,14 +63,6 @@ public class LoginScreen extends AppCompatActivity {
         Intent intent = new Intent(LoginScreen.this, Menu.class);
         startActivity(intent);
     }
-
-    //Views database
-    public void test2()
-    {
-        String result = database.debugger();
-        toastMessage(result);
-    }
-
 
     public void toastMessage(String message)
     {
