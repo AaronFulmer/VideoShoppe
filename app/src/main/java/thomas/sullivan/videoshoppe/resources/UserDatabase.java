@@ -554,7 +554,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                 for (int e = 0; e < terms.length; e++) {
                     for (int b = 0; b < test.length() - terms[e].length(); b++) {
                         for (int d = 0; d < terms[e].length(); d++) {
-                            if (test.charAt(d) == terms[e].charAt(d)) {
+                            if (test.charAt(d+b) == terms[e].charAt(d)) {
                                 commonChars++;
                             }
                         }
