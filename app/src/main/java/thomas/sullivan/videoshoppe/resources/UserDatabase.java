@@ -185,6 +185,38 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public boolean createCustomer(String ID, String lastName, String firstName, String email,
+                                  String phone, String card, String expiration, String security, String type )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValuesCustomer = new ContentValues();
+        contentValuesCustomer.put(customerID, ID);
+        contentValuesCustomer.put(customerLastName, lastName);
+        contentValuesCustomer.put(customerFirstName, firstName);
+        contentValuesCustomer.put(customerEmail, email);
+        contentValuesCustomer.put(customerPhoneNumber, phone);
+        contentValuesCustomer.put(customerCardNumber,card);
+        long result = db.insert(customerTable,null,contentValuesCustomer);
+        if(result == -1)
+        {
+            return false;
+        }
+        else {
+            ContentValues contentValuesCard = new ContentValues();
+            contentValuesCard.put(cardNumber, card);
+            contentValuesCard.put(cardExpDate, expiration);
+            contentValuesCard.put(cardSecurityCode, security);
+            contentValuesCard.put(cardType,type);
+            long resultB = db.insert(cardTable,null,contentValuesCard);
+            if(resultB == -1)
+            {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     public void wipeDatabase()
     {
         onUpgrade(this.getWritableDatabase(), 1, 1);
@@ -236,6 +268,12 @@ public class UserDatabase extends SQLiteOpenHelper {
         return res;
     }
 
+    public Cursor getAllCustomerData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM customer a INNER JOIN card b ON a.cardNumber=b.number",null);
+        return res;
+    }
+
     public Boolean insertIntoTable(String table, String[] columns, String[] values){
         ContentValues c = new ContentValues();
         for(int a = 0; a < values.length; a++){
@@ -283,6 +321,39 @@ public class UserDatabase extends SQLiteOpenHelper {
         return strings;
     }
 
+    public String[]customerRowReturn(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] strings = new String[8];
+        String tempNumber = "";
+        String[] columnsA = {customerLastName,customerFirstName,customerEmail,customerCardNumber,customerPhoneNumber};
+        String[] columnsB = {cardExpDate,cardSecurityCode,cardType};
+        String whereA = customerID + " = ?";
+        String whereB = cardNumber + " = ?";
+        String[] argsA = new String[]{id};
+        String[] argsB = new String[]{tempNumber};
+
+        Cursor resA = db.query(customerTable, columnsA, whereA, argsA, null, null, null);
+        if(resA.moveToFirst())
+        {
+            strings[0] = resA.getString(resA.getColumnIndex(customerLastName));
+            strings[1] = resA.getString(resA.getColumnIndex(customerFirstName));
+            strings[2] = resA.getString(resA.getColumnIndex(customerEmail));
+            strings[3] = resA.getString(resA.getColumnIndex(customerPhoneNumber));
+            strings[4] = resA.getString(resA.getColumnIndex(customerCardNumber));
+            tempNumber = resA.getString(resA.getColumnIndex(customerCardNumber));
+        }
+
+        Cursor resB = db.query(cardTable, columnsB, whereB, argsB, null, null, null);
+        if(resB.moveToFirst())
+        {
+            strings[5] = resB.getString(resB.getColumnIndex(cardExpDate));
+            strings[6] = resB.getString(resB.getColumnIndex(cardSecurityCode));
+            strings[7] = resB.getString(resB.getColumnIndex(cardType));
+        }
+        return strings;
+    }
+
     //returns true if the user is deleted; Returns false if user is non-existent.
     public boolean removeEmployee (String id)
     {
@@ -295,6 +366,35 @@ public class UserDatabase extends SQLiteOpenHelper {
         {
             db.execSQL("DELETE FROM "+employeeTable+" WHERE "+employeeID+"='"+id+"'");
             return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    //returns true if the user is deleted; Returns false if user is non-existent.
+    public boolean removeCustomer (String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String tempCard = "";
+        String[] columnsA = {customerID,customerCardNumber};
+        String whereA = customerID + " = ?";
+        String[] argsA = new String[]{id};
+        String[] columnsB = {cardNumber};
+        String whereB = cardNumber + " = ?";
+        String[] argsB = new String[]{tempCard};
+        Cursor resA = db.query(customerTable, columnsA, whereA, argsA, null, null, null);
+        if(resA.moveToFirst())
+        {
+            tempCard = resA.getString(resA.getColumnIndex(customerCardNumber));
+            db.execSQL("DELETE FROM "+customerTable+" WHERE "+customerID+"='"+id+"'");
+            Cursor resB = db.query(cardTable, columnsB, whereB, argsB, null, null, null);
+            if(resB.moveToFirst()) {
+                db.execSQL("DELETE FROM "+cardTable+" WHERE "+cardNumber+"='"+tempCard+"'");
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

@@ -101,7 +101,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
             admin.setText(adminText);
 
             final String tempEmployeeID = employees.get(currentSelectedGroup).getiD();
-            final String tempName = employees.get(currentSelectedGroup).getFirstName()+" "+employees.get(currentSelectedGroup).getLastName();
+            final String tempName = employees.get(currentSelectedGroup).getLastName()+" "+employees.get(currentSelectedGroup).getFirstName();
 
             ImageButton deleteMain = (ImageButton) convertView.findViewById(R.id.delete_employe_Button);
             ImageButton editMain = (ImageButton) convertView.findViewById(R.id.edit_employee_Button);
@@ -147,31 +147,35 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                         !tempEmail.getText().toString().isEmpty() && !tempPhoneNumber.getText().toString().isEmpty() && !tempUsername.getText().toString().isEmpty() &&
                                         !tempPassword.getText().toString().isEmpty()) {
                                     if (db.removeEmployee(tempEmployeeID)) {
-                                        if (tempAdmin.isChecked()) {
-                                            if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
-                                                    tempPassword.getText().toString(), 1, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
-                                                Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
-                                                editor.dismiss();
-                                            } else {
-                                                Toast.makeText(getContext(), "Employee Update Failed.", Toast.LENGTH_SHORT).show();
-                                                editor.dismiss();
-                                            }
+                                        if(tempPhoneNumber.getText().toString().length() != 10 || tempPhoneNumber.getText().toString().contains("[a-zA-Z]+"))
+                                        {
+                                            Toast.makeText(getContext(), "Invalid Phone Number.", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
-                                                    tempPassword.getText().toString(), 0, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
-                                                Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
-                                                editor.dismiss();
-
+                                            if (tempAdmin.isChecked()) {
+                                                if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
+                                                        tempPassword.getText().toString(), 1, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
+                                                    Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
+                                                    editor.dismiss();
+                                                } else {
+                                                    Toast.makeText(getContext(), "Employee Update Failed.", Toast.LENGTH_SHORT).show();
+                                                    editor.dismiss();
+                                                }
                                             } else {
-                                                Toast.makeText(getContext(), "Employee Update Failed.", Toast.LENGTH_SHORT).show();
-                                                editor.dismiss();
+                                                if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
+                                                        tempPassword.getText().toString(), 0, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
+                                                    Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
+                                                    editor.dismiss();
+
+                                                } else {
+                                                    Toast.makeText(getContext(), "Employee Update Failed.", Toast.LENGTH_SHORT).show();
+                                                    editor.dismiss();
+                                                }
                                             }
                                         }
                                         refreshList();
                                     }
                                 } else {
                                     Toast.makeText(getContext(), "Text Fields CANNOT be empty.", Toast.LENGTH_SHORT).show();
-
                                 }
                             }
                         });
@@ -348,7 +352,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(this);
 
-        android.widget.SearchView searchView = (android.widget.SearchView) view.findViewById(R.id.action_search);
+        android.widget.SearchView searchView = (android.widget.SearchView) view.findViewById(R.id.action_search_employees);
         searchView.setOnQueryTextListener(this);
 
         FloatingActionButton fab = view.findViewById(R.id.employeefab);
@@ -381,23 +385,31 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                     !tempEmail.getText().toString().isEmpty() && !tempPhoneNumber.getText().toString().isEmpty() && !tempUsername.getText().toString().isEmpty() &&
                                     !tempPassword.getText().toString().isEmpty())
                             {
-                                if(tempAdmin.isChecked())
+                                if(tempPhoneNumber.getText().toString().length() != 10 || tempPhoneNumber.getText().toString().contains("[a-zA-Z]+"))
                                 {
-                                    if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),1,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
-                                    {
-                                        Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getContext(),"ERROR: Employee has not been added.", Toast.LENGTH_SHORT).show();
-                                    }
+                                    Toast.makeText(getContext(), "Invalid Phone Number.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),0,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                    if(tempAdmin.isChecked())
                                     {
-                                        Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
+                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),1,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                        {
+                                            Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        } else {
+                                            Toast.makeText(getContext(),"ERROR: Employee has not been added.", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
                                     } else {
-                                        Toast.makeText(getContext(),"ERROR: Employee has not been added.", Toast.LENGTH_SHORT).show();
+                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),0,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                        {
+                                            Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        } else {
+                                            Toast.makeText(getContext(),"ERROR: Employee has not been added.", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
                                     }
                                 }
-                                addEmployeeDialog.setView(view);
                                 dialog.dismiss();
                                 refreshList();
                             } else {
