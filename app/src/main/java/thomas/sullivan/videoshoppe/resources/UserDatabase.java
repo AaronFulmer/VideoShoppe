@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+
 public class UserDatabase extends SQLiteOpenHelper {
 
     private static final String DB_Name = "videoshoppe.db";
@@ -279,6 +283,8 @@ public class UserDatabase extends SQLiteOpenHelper {
         return actorsTable;
     }
 
+    public static String getFinanceTable(){ return financeTable; }
+
     public static String[] getEmployeeAttributes(){
         return new String[]{employeeID, employeeLastName, employeeFirstName, employeeEmail,
                 employeePhoneNumber, employeeUserName, employeePassword, employeeAdmin};
@@ -340,4 +346,91 @@ public class UserDatabase extends SQLiteOpenHelper {
     public String debugger(){
         return "temp";
     }
+
+    /*
+    *  Search Database Method
+    *       The idea is that the function checks for perfect matches in the database first, then uses a
+    *       brute force string matching algorithm to find the highest number of common characters between
+    *       the search terms and the string from the database. It then adds them to an arraylist after
+    *       sorting them based on number of common characters.
+    *
+    *  - Retrieve entire database in the form of a single cursor
+    *  - Check each row of the targeted filter for a perfect match of the search terms
+    *       - push matches to stack to mark row number as used
+    *  - Reset cursor to top of table
+    *  - Run a brute force string matching algorithm to determine the highest number of common characters in the search terms and the filtered column
+    *  - Put the highest number of common characters for the search terms in a 2D array with row numbers for later sorting
+    *  - After the common characters are counted and stored, use Arrays.sort to sort them by number of common characters
+    *  - Using the stored row numbers, add all of the rows to the arraylist in order of match quality
+    *  - Return arraylist
+    *
+    * */
+    public ArrayList<ArrayList<String>> searchDatabase(String term, String filter){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from " + dvdTable, null);   //  Get a readable database
+        String[] columns = c.getColumnNames();                                      //  Get the column names (mainly to get the number of columns)
+        int target = c.getColumnIndex(filter);                                      //  Get the target column index from what the search is filtered by
+        ArrayList<ArrayList<String>> list = new ArrayList<>();                      //  Results will be stored in a 2D ArrayList of Strings
+        int rows = c.getCount();                                                    //  Get the number of rows in the cursor
+        Stack used = new Stack();                                                   //  Make a stack to hold the used row indices
+
+        if(!c.moveToFirst()){
+            return list;
+        }
+
+        for(int a = 0; a < rows; a++){
+            String test = c.getString(target);
+            if(test.contains(term)){
+                used.push(a);
+                list.add(new ArrayList<String>());
+                for(int b = 0; b < columns.length - 1; b++){
+                    list.get(list.size() - 1).add(c.getString(b));
+                }
+            }
+            c.moveToNext();
+        }
+
+        int commonChars = 0;
+        c.moveToFirst();
+        String[] terms = term.split(" ");
+        int[][] chars = new int[2][rows];
+        for(int a = 0; a < rows; a++){
+            chars[0][a] = a;
+            if(!used.contains(a)) {
+                String test = c.getString(target);
+                for (int e = 0; e < terms.length; e++) {
+                    for (int b = 0; b < test.length() - terms[e].length(); b++) {
+                        commonChars = 0;
+                        for (int d = 0; d < terms[e].length(); d++) {
+                            if (test.charAt(d+b) == terms[e].charAt(d)) {
+                                commonChars++;
+                            }
+                        }
+                        if (commonChars > chars[1][a]) chars[1][a] = commonChars;
+                    }
+                }
+            }
+            c.moveToNext();
+        }
+        c.moveToFirst();
+        Arrays.sort(chars);
+        c.move(chars[0][0]);
+        list.add(new ArrayList<String>());
+        for(int a = 0; a < columns.length; a++){
+            list.get(list.size() - 1).add(c.getString(a));
+        }
+
+        for(int a = 1; a < rows; a++){
+            int offset = chars[0][a] - chars[0][a-1];
+            c.move(offset);
+            list.add(new ArrayList<String>());
+            for(int b = 0; b < columns.length; b++){
+                list.get(list.size() - 1).add(c.getString(b));
+            }
+        }
+
+        return list;
+    }
+
 }
