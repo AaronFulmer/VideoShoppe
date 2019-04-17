@@ -18,7 +18,7 @@
     <string name="nav_movies">Movies</string>
     <string name="nav_customers">Customers</string>
     <string name="nav_inventory">Inventory</string>
-    <string name="nav_employee">Employee</string>
+    <string name="nav_employee">Employees</string>
     <string name="nav_logout">Logout</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
@@ -27,9 +27,25 @@
         <item>Movies</item>
         <item>Customers</item>
         <item>Inventory</item>
-        <item>Employee</item>
+        <item>Employees</item>
         <item>Logout</item>
     </string-array>
+
+    <string-array name="employee_filters">
+        <item>Name</item>
+        <item>ID</item>
+        <item>Phone</item>
+        <item>Email</item>
+    </string-array>
+
+    <string-array name="customer_filters">
+        <item>Name</item>
+        <item>ID</item>
+        <item>Phone</item>
+        <item>Email</item>
+        <item>Card</item>
+    </string-array>
+
 
     <string name="action_clear_all">Clear All</string>
     <string name="action_logout">Logout</string>

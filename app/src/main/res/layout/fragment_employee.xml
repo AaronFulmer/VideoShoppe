@@ -3,12 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.EmployeeFragment">
+    android:background="@color/colorAccent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="thomas.sullivan.videoshoppe.fragment.EmployeeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/employeefab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/baseline_add_24"
+        android:tint="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_margin="16dp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <SearchView
+                android:id="@+id/action_search_employees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:layout_marginTop="5dp"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search Employees"
+                android:layout_weight="35"/>
+
+            <Spinner
+                android:id="@+id/employeeFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:spinnerMode="dropdown"
+                android:padding="3dp"></Spinner>
+
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/employees_listed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ExpandableListView>
+
+    </LinearLayout>
 
 </FrameLayout>

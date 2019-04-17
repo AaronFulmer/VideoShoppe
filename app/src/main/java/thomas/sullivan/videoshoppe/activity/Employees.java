@@ -1,5 +1,7 @@
 package thomas.sullivan.videoshoppe.activity;
 
+
+import android.content.ClipData;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,35 +14,23 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.model.GradientColor;
-import com.github.mikephil.charting.utils.MPPointF;
 
-import thomas.sullivan.videoshoppe.activity.R;
+import java.util.List;
+
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
 import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
@@ -56,6 +46,8 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
     UserDatabase database;
     String firstName;
     String lastName;
+
+    MenuItem addEmployee;
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -126,12 +118,17 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
         // initializing navigation menu
         setUpNavigationView();
 
+        onOptionsItemSelected(addEmployee);
+
+
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
     }
+
 
     private void loadNavHeader() {
         // name, website
@@ -335,13 +332,11 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(MainMenu menu) {
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.main, (android.view.Menu) menu);
-        }
         return true;
     }
 
@@ -352,11 +347,6 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

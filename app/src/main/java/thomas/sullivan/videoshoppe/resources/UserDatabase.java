@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,6 +73,8 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     private static String currentEmployeeFirstName = "";
     private static String currentEmployeeLastName = "";
+    private static String currentEmployeeUserID = "";
+
 
     //Database Default Constructor
     public UserDatabase(Context context)
@@ -136,6 +139,12 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + financeRevenue + " DOUBLE, "
                 + financeExpenditures + " DOUBLE, "
                 + financeProfit + " DOUBLE);");
+
+        if(!searchCredentials("ADMIN","ADMIN"))
+        {
+            createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",true, "555-555-5555","administrator123@test.com");
+        }
+
     }
 
     @Override
@@ -155,7 +164,8 @@ public class UserDatabase extends SQLiteOpenHelper {
 
 
     public boolean createEmployee(String ID, String lastName, String firstName, String username,
-                                  String password, boolean admin )
+                                  String password, boolean admin, String cellPhoneNumber, String email )
+
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -164,7 +174,11 @@ public class UserDatabase extends SQLiteOpenHelper {
         contentValues.put(employeeFirstName, firstName);
         contentValues.put(employeeUserName, username);
         contentValues.put(employeePassword, password);
+        contentValues.put(employeeEmail,email);
+        contentValues.put(employeePhoneNumber,cellPhoneNumber);
+
         contentValues.put(employeeAdmin, (admin)? 1 : 0);
+
         long result = db.insert(employeeTable,null,contentValues);
         if(result == -1)
         {
@@ -175,24 +189,59 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
     }
 
+
+    public boolean createCustomer(String ID, String lastName, String firstName, String email,
+                                  String phone, String card, String expiration, String security, String type )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValuesCustomer = new ContentValues();
+        contentValuesCustomer.put(customerID, ID);
+        contentValuesCustomer.put(customerLastName, lastName);
+        contentValuesCustomer.put(customerFirstName, firstName);
+        contentValuesCustomer.put(customerEmail, email);
+        contentValuesCustomer.put(customerPhoneNumber, phone);
+        contentValuesCustomer.put(customerCardNumber,card);
+        long result = db.insert(customerTable,null,contentValuesCustomer);
+        if(result == -1)
+        {
+            return false;
+        }
+        else {
+            ContentValues contentValuesCard = new ContentValues();
+            contentValuesCard.put(cardNumber, card);
+            contentValuesCard.put(cardExpDate, expiration);
+            contentValuesCard.put(cardSecurityCode, security);
+            contentValuesCard.put(cardType,type);
+            long resultB = db.insert(cardTable,null,contentValuesCard);
+            if(resultB == -1)
+            {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     public void wipeDatabase()
     {
         onUpgrade(this.getWritableDatabase(), 1, 1);
     }
 
-    public String searchCredentials(String user, String pass)
+    public Boolean searchCredentials(String user, String pass)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String[] columns = {employeeID};
-        String where = employeePassword + " = ? and " + employeeUserName + " = ?";
+        //"COLLATE NOCASE" ignores case sensitivity, in this case ignores username case sensitivity
+        String where = employeePassword + " = ?  and " + employeeUserName + " = ? COLLATE NOCASE";
         String[] args = new String[]{pass, user};
         Cursor c = db.query(employeeTable, columns, where, args, null, null, null);
 
-        if(!c.moveToFirst()){
-            return "invalid";
+        if(c.moveToFirst()){
+            return true;
+        } else {
+            return false;
         }
-        return c.getString(0);
     }
 
 
@@ -203,14 +252,31 @@ public class UserDatabase extends SQLiteOpenHelper {
         String where = employeeID + " = ?";
         String[] args = new String[]{id};
         Cursor res = db.query(employeeTable, columns, where, args, null, null, null);
-        Boolean adminCheck = res.getInt(0) > 0;
-        return adminCheck;
+        int adminTest;
+        if(res.moveToFirst())
+        {
+           adminTest = res.getInt(res.getColumnIndex(employeeAdmin));
+           if(adminTest == 1) {
+               return true;
+           } else {
+               return false;
+           }
+        } else {
+            return false;
+        }
+
     }
 
 
     public Cursor getAllEmployeeData() {
-        //SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = this.getReadableDatabase().rawQuery("select * from "+employeeTable,null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from "+employeeTable,null);
+        return res;
+    }
+
+    public Cursor getAllCustomerData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM customer a INNER JOIN card b ON a.cardNumber=b.number",null);
         return res;
     }
 
@@ -227,8 +293,9 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     //Updates employee's data in the database
-    public boolean updateEmployee(String table, String ID, String lastName, String firstName,
-                                  String username, String password, String admin ) {
+
+    public boolean updateEmployee(String ID, String lastName, String firstName,
+                                  String username, String password, int admin ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(employeeLastName, lastName);
@@ -236,20 +303,106 @@ public class UserDatabase extends SQLiteOpenHelper {
         contentValues.put(employeeUserName, username);
         contentValues.put(employeePassword, password);
         contentValues.put(employeeAdmin, admin);
-        db.update(table, contentValues, employeeID + " = ?",new String[] { ID });
+        db.update(employeeTable, contentValues, employeeID + " = ?",new String[] { ID });
         return true;
+    }
+
+    public String[] employeeRowReturn(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] strings = new String[7];
+        String[] columns = {employeeLastName,employeeFirstName,employeeUserName,employeePassword,employeeAdmin,employeeEmail,employeePhoneNumber};
+        String where = employeeID + " = ?";
+        String[] args = new String[]{id};
+        Cursor res = db.query(employeeTable, columns, where, args, null, null, null);
+        if(res.moveToFirst())
+        {
+            strings[0] = res.getString(res.getColumnIndex(employeeLastName));
+            strings[1] = res.getString(res.getColumnIndex(employeeFirstName));
+            strings[2] = res.getString(res.getColumnIndex(employeeUserName));
+            strings[3] = res.getString(res.getColumnIndex(employeePassword));
+            strings[4] = ""+res.getInt(res.getColumnIndex(employeeAdmin));
+            strings[5] = res.getString(res.getColumnIndex(employeeEmail));
+            strings[6] = res.getString(res.getColumnIndex(employeePhoneNumber));
+        }
+        return strings;
+    }
+
+    public String[]customerRowReturn(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] strings = new String[8];
+        String tempNumber = "";
+        String[] columnsA = {customerLastName,customerFirstName,customerEmail,customerCardNumber,customerPhoneNumber};
+        String[] columnsB = {cardExpDate,cardSecurityCode,cardType};
+        String whereA = customerID + " = ?";
+        String whereB = cardNumber + " = ?";
+        String[] argsA = new String[]{id};
+        String[] argsB = new String[]{tempNumber};
+
+        Cursor resA = db.query(customerTable, columnsA, whereA, argsA, null, null, null);
+        if(resA.moveToFirst())
+        {
+            strings[0] = resA.getString(resA.getColumnIndex(customerLastName));
+            strings[1] = resA.getString(resA.getColumnIndex(customerFirstName));
+            strings[2] = resA.getString(resA.getColumnIndex(customerEmail));
+            strings[3] = resA.getString(resA.getColumnIndex(customerPhoneNumber));
+            strings[4] = resA.getString(resA.getColumnIndex(customerCardNumber));
+            tempNumber = resA.getString(resA.getColumnIndex(customerCardNumber));
+        }
+
+        Cursor resB = db.query(cardTable, columnsB, whereB, argsB, null, null, null);
+        if(resB.moveToFirst())
+        {
+            strings[5] = resB.getString(resB.getColumnIndex(cardExpDate));
+            strings[6] = resB.getString(resB.getColumnIndex(cardSecurityCode));
+            strings[7] = resB.getString(resB.getColumnIndex(cardType));
+        }
+        return strings;
     }
 
     //returns true if the user is deleted; Returns false if user is non-existent.
     public boolean removeEmployee (String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        int numberOfDeletedRows = db.delete(employeeTable, employeeID + " = ?",new String[] {id});
-
-        if(numberOfDeletedRows > 0) {
+        String[] columns = {employeeID};
+        String where = employeeID + " = ?";
+        String[] args = new String[]{id};
+        Cursor res = db.query(employeeTable, columns, where, args, null, null, null);
+        if(res.moveToFirst())
+        {
+            db.execSQL("DELETE FROM "+employeeTable+" WHERE "+employeeID+"='"+id+"'");
             return true;
+        } else {
+            return false;
         }
-        else {
+
+    }
+
+    //returns true if the user is deleted; Returns false if user is non-existent.
+    public boolean removeCustomer (String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String tempCard = "";
+        String[] columnsA = {customerID,customerCardNumber};
+        String whereA = customerID + " = ?";
+        String[] argsA = new String[]{id};
+        String[] columnsB = {cardNumber};
+        String whereB = cardNumber + " = ?";
+        String[] argsB = new String[]{tempCard};
+        Cursor resA = db.query(customerTable, columnsA, whereA, argsA, null, null, null);
+        if(resA.moveToFirst())
+        {
+            tempCard = resA.getString(resA.getColumnIndex(customerCardNumber));
+            db.execSQL("DELETE FROM "+customerTable+" WHERE "+customerID+"='"+id+"'");
+            Cursor resB = db.query(cardTable, columnsB, whereB, argsB, null, null, null);
+            if(resB.moveToFirst()) {
+                db.execSQL("DELETE FROM "+cardTable+" WHERE "+cardNumber+"='"+tempCard+"'");
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
 
@@ -317,21 +470,24 @@ public class UserDatabase extends SQLiteOpenHelper {
                 financeExpenditures, financeProfit};
     }
 
-    public void setCurrentUser(String id){
+    public void setCurrentUser(String username){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String[] columns = {employeeFirstName, employeeLastName};
-        String where = employeeID + " = ?";
-        String[] args = {id};
+        String[] columns = {employeeFirstName, employeeLastName,employeeID};
+        String where = employeeUserName + " = ? COLLATE NOCASE";
+        String[] args = {username};
         Cursor c = db.query(employeeTable, columns, where, args, null, null, null);
 
         if(c.moveToFirst()){
-            currentEmployeeLastName = c.getString(0);
-            currentEmployeeFirstName = c.getString(1);
+            currentEmployeeLastName = c.getString(c.getColumnIndex(employeeLastName));
+            currentEmployeeFirstName = c.getString(c.getColumnIndex(employeeFirstName));
+            currentEmployeeUserID = c.getString(c.getColumnIndex(employeeID));
         }
         else{
             currentEmployeeLastName = "";
             currentEmployeeFirstName = "ERROR";
+            currentEmployeeUserID = "";
+
         }
     }
 
@@ -341,6 +497,10 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public String getLoggedInUserLastName(){
         return currentEmployeeLastName;
+    }
+
+    public String getLoggedInUserID(){
+        return currentEmployeeUserID;
     }
 
     public String debugger(){
@@ -434,3 +594,4 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
 }
+

@@ -17,13 +17,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"></activity>
         <activity
-            android:name=".MainMenu"
+            android:name=".Menu"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"/>
-        <activity android:name=".CheckIn" />
-        <activity android:name=".checkOutDvd" />
-        <activity android:name=".verifyCustomer" />
         <activity android:name=".LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

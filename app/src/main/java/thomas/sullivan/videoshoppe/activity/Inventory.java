@@ -16,31 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.model.GradientColor;
-import com.github.mikephil.charting.utils.MPPointF;
 
-import thomas.sullivan.videoshoppe.activity.R;
 import thomas.sullivan.videoshoppe.fragment.HomeFragment;
 import thomas.sullivan.videoshoppe.fragment.MoviesFragment;
 import thomas.sullivan.videoshoppe.fragment.CustomersFragment;
@@ -335,7 +313,7 @@ public class Inventory extends AppCompatActivity implements MoviesFragment.OnFra
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(MainMenu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // show menu only when home fragment is selected
@@ -353,10 +331,6 @@ public class Inventory extends AppCompatActivity implements MoviesFragment.OnFra
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

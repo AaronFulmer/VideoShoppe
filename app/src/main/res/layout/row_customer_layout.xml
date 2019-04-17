@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
     android:orientation="horizontal"
-    android:padding="5dip" >
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/colorAccent">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/customerListHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:gravity="center_vertical"
+        android:textSize="24dp"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Test Header"
+        android:paddingBottom="6dp"
+        android:textColor="@color/colorPrimary" />
 
-    <TextView
-        android:id="@+id/reporter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:textColor="#343434"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/reporter"
-        android:layout_alignBottom="@+id/reporter"
-        android:layout_alignParentRight="true"
-        android:textColor="#343434"
-        android:textSize="12sp" />
-</RelativeLayout>
+</LinearLayout>
