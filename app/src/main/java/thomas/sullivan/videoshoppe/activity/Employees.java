@@ -1,5 +1,6 @@
 package thomas.sullivan.videoshoppe.activity;
 
+
 import android.content.ClipData;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -330,7 +332,9 @@ public class Employees extends AppCompatActivity implements MoviesFragment.OnFra
         super.onBackPressed();
     }
 
+
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
 
         return true;

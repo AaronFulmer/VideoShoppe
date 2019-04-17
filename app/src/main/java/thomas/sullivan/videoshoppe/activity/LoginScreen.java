@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 public class LoginScreen extends AppCompatActivity {
@@ -52,7 +51,6 @@ public class LoginScreen extends AppCompatActivity {
                         else{
                             toastMessage("Invalid Credentials.");
                         }
-
                     }
                 }
         );
@@ -63,6 +61,7 @@ public class LoginScreen extends AppCompatActivity {
         Intent intent = new Intent(LoginScreen.this, Menu.class);
         startActivity(intent);
     }
+
 
     public void toastMessage(String message)
     {

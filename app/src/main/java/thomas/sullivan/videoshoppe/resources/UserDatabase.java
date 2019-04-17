@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 
 public class UserDatabase extends SQLiteOpenHelper {
@@ -71,6 +70,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static String currentEmployeeFirstName = "";
     private static String currentEmployeeLastName = "";
     private static String currentEmployeeUserID = "";
+
 
     //Database Default Constructor
     public UserDatabase(Context context)
@@ -138,7 +138,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         if(!searchCredentials("ADMIN","ADMIN"))
         {
-            createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",1, "555-555-5555","administrator123@test.com");
+            createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",true, "555-555-5555","administrator123@test.com");
         }
 
     }
@@ -160,7 +160,8 @@ public class UserDatabase extends SQLiteOpenHelper {
 
 
     public boolean createEmployee(String ID, String lastName, String firstName, String username,
-                                  String password, int admin, String cellPhoneNumber, String email )
+                                  String password, boolean admin, String cellPhoneNumber, String email )
+
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -169,12 +170,11 @@ public class UserDatabase extends SQLiteOpenHelper {
         contentValues.put(employeeFirstName, firstName);
         contentValues.put(employeeUserName, username);
         contentValues.put(employeePassword, password);
-        if(admin == 0 || admin == 1)
-        {
-            contentValues.put(employeeAdmin, admin);
-        }
         contentValues.put(employeeEmail,email);
         contentValues.put(employeePhoneNumber,cellPhoneNumber);
+
+        contentValues.put(employeeAdmin, (admin)? 1 : 0);
+
         long result = db.insert(employeeTable,null,contentValues);
         if(result == -1)
         {
@@ -184,6 +184,7 @@ public class UserDatabase extends SQLiteOpenHelper {
             return true;
         }
     }
+
 
     public boolean createCustomer(String ID, String lastName, String firstName, String email,
                                   String phone, String card, String expiration, String security, String type )
@@ -259,6 +260,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         } else {
             return false;
         }
+
     }
 
 
@@ -287,6 +289,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     //Updates employee's data in the database
+
     public boolean updateEmployee(String ID, String lastName, String firstName,
                                   String username, String password, int admin ) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -473,12 +476,12 @@ public class UserDatabase extends SQLiteOpenHelper {
             currentEmployeeLastName = c.getString(c.getColumnIndex(employeeLastName));
             currentEmployeeFirstName = c.getString(c.getColumnIndex(employeeFirstName));
             currentEmployeeUserID = c.getString(c.getColumnIndex(employeeID));
-
         }
         else{
             currentEmployeeLastName = "";
             currentEmployeeFirstName = "ERROR";
             currentEmployeeUserID = "";
+
         }
     }
 
@@ -490,9 +493,6 @@ public class UserDatabase extends SQLiteOpenHelper {
         return currentEmployeeLastName;
     }
 
-
-
-
     public String getLoggedInUserID(){
         return currentEmployeeUserID;
     }
@@ -501,3 +501,4 @@ public class UserDatabase extends SQLiteOpenHelper {
         return "temp";
     }
 }
+

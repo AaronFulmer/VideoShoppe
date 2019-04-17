@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -314,7 +313,7 @@ public class Customers extends AppCompatActivity implements MoviesFragment.OnFra
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(thomas.sullivan.videoshoppe.activity.Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // show menu only when home fragment is selected
