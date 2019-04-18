@@ -5,5 +5,57 @@
     android:layout_height="match_parent"
     tools:context="thomas.sullivan.videoshoppe.fragment.MoviesFragment">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/moviesfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/baseline_add_24"
+            android:tint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_margin="16dp" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <SearchView
+                    android:id="@+id/action_search_movies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:layout_marginTop="5dp"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="Search Movies"
+                    android:layout_weight="35"/>
+
+                <Spinner
+                    android:id="@+id/moviesFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:spinnerMode="dropdown"
+                    android:padding="3dp"></Spinner>
+
+            </LinearLayout>
+
+            <ExpandableListView
+                android:id="@+id/movies_listed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ExpandableListView>
+
+        </LinearLayout>
+
 
 </FrameLayout>
