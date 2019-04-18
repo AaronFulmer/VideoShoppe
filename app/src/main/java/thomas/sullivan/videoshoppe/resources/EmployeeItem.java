@@ -2,6 +2,7 @@ package thomas.sullivan.videoshoppe.resources;
 
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeItem {
@@ -22,6 +23,16 @@ public class EmployeeItem {
         this.email = aEmail;
         this.username = aUsername;
         this.admin = aAdmin;
+    }
+
+    public EmployeeItem(ArrayList<String> a){
+        this.iD = a.get(0);
+        this.lastName = a.get(1);
+        this.firstName = a.get(2);
+        this.email = a.get(3);
+        this.phoneNumber = a.get(4);
+        this.username = a.get(5);
+        this.admin = Integer.parseInt(a.get(7));
     }
 
     public String getFirstName(){return this.firstName;}

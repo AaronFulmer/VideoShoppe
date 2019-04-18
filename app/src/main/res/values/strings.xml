@@ -32,7 +32,8 @@
     </string-array>
 
     <string-array name="employee_filters">
-        <item>Name</item>
+        <item>First Name</item>
+        <item>Last Name</item>
         <item>ID</item>
         <item>Phone</item>
         <item>Email</item>

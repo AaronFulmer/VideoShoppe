@@ -525,10 +525,10 @@ public class UserDatabase extends SQLiteOpenHelper {
     *  - Return arraylist
     *
     * */
-    public ArrayList<ArrayList<String>> searchDatabase(String term, String filter){
+    public ArrayList<ArrayList<String>> searchDatabase(String term, String filter, String table){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from " + dvdTable, null);   //  Get a readable database
+        Cursor c = db.rawQuery("select * from " + table, null);   //  Get a readable database
         String[] columns = c.getColumnNames();                                      //  Get the column names (mainly to get the number of columns)
         int target = c.getColumnIndex(filter);                                      //  Get the target column index from what the search is filtered by
         ArrayList<ArrayList<String>> list = new ArrayList<>();                      //  Results will be stored in a 2D ArrayList of Strings
@@ -540,11 +540,11 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
 
         for(int a = 0; a < rows; a++){
-            String test = c.getString(target);
-            if(test.contains(term)){
+            String test = c.getString(target).toLowerCase();
+            if(test.contains(term) && !used.contains(a)){
                 used.push(a);
                 list.add(new ArrayList<String>());
-                for(int b = 0; b < columns.length - 1; b++){
+                for(int b = 0; b < columns.length; b++){
                     list.get(list.size() - 1).add(c.getString(b));
                 }
             }
@@ -554,11 +554,11 @@ public class UserDatabase extends SQLiteOpenHelper {
         int commonChars = 0;
         c.moveToFirst();
         String[] terms = term.split(" ");
-        int[][] chars = new int[2][rows];
+        int[][] chars = new int[rows][2];
         for(int a = 0; a < rows; a++){
-            chars[0][a] = a;
+            chars[a][0] = a;
             if(!used.contains(a)) {
-                String test = c.getString(target);
+                String test = c.getString(target).toLowerCase();
                 for (int e = 0; e < terms.length; e++) {
                     for (int b = 0; b < test.length() - terms[e].length(); b++) {
                         commonChars = 0;
@@ -567,26 +567,51 @@ public class UserDatabase extends SQLiteOpenHelper {
                                 commonChars++;
                             }
                         }
-                        if (commonChars > chars[1][a]) chars[1][a] = commonChars;
+                        if (commonChars > chars[a][1]) chars[a][1] = commonChars;
                     }
                 }
             }
             c.moveToNext();
         }
         c.moveToFirst();
-        Arrays.sort(chars);
+        // Arrays.sort(chars);
+        int length = chars.length - 1;
+        for(int a = 0; a <= length; a++){
+            int max = chars[0][1];
+            int maxIndex = 0;
+            for(int b = 0; b <= length; b++){
+                if(chars[b][1] > max) {
+                    max = chars[b][1];
+                    maxIndex = b;
+                }
+            }
+            int temp1 = chars[maxIndex][1];
+            int temp2 = chars[maxIndex][0];
+            chars[maxIndex][1] = chars[0][1];
+            chars[maxIndex][0] = chars[0][0];
+            chars[0][1] = temp1;
+            chars[0][0] = temp2;
+        }
+
+
         c.move(chars[0][0]);
-        list.add(new ArrayList<String>());
-        for(int a = 0; a < columns.length; a++){
-            list.get(list.size() - 1).add(c.getString(a));
+        if(!used.contains(chars[0][0])) {
+            used.push(chars[0][0]);
+            list.add(new ArrayList<String>());
+            for (int a = 0; a < columns.length; a++) {
+                list.get(list.size() - 1).add(c.getString(a));
+            }
         }
 
         for(int a = 1; a < rows; a++){
-            int offset = chars[0][a] - chars[0][a-1];
-            c.move(offset);
-            list.add(new ArrayList<String>());
-            for(int b = 0; b < columns.length; b++){
-                list.get(list.size() - 1).add(c.getString(b));
+            //int offset = chars[a][0] - chars[a-1][0];
+            c.move(chars[a][0]);
+            if(!used.contains(chars[a][0])) {
+                used.push(chars[a][0]);
+                list.add(new ArrayList<String>());
+                for (int b = 0; b < columns.length; b++) {
+                    list.get(list.size() - 1).add(c.getString(b));
+                }
             }
         }
 

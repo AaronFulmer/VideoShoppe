@@ -292,7 +292,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
     private String mParam2;
     private SearchView.OnQueryTextListener queryTextListener;
 
-    // name = 0, id = 1, cellphone = 2, email = 3. Default = name
+    // first name = 0, last name = 1, id = 2, cellphone = 3, email = 4. Default = first name
     int spinnerSelection;
 
     private int lastExpandedPosition = -1;
@@ -567,63 +567,28 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
     public boolean onQueryTextChange(String newText) {
 
         String userInput = newText.toLowerCase();
+        if(userInput.equals("")){return false;}
         ArrayList<EmployeeItem> employeeListFiltered = new ArrayList<>();
+        String filter;
+        switch(spinnerSelection){
+            case 1: filter = db.getEmployeeAttributes()[1]; break;
+            case 2: filter = db.getEmployeeAttributes()[0]; break;
+            case 3: filter = db.getEmployeeAttributes()[4]; break;
+            case 4: filter = db.getEmployeeAttributes()[3]; break;
+            default:filter = db.getEmployeeAttributes()[2]; break;
+        }
 
-        //Employee ID
-        if(spinnerSelection == 1)
-        {
-            for(EmployeeItem employee : employees) {
-                if (employee.getiD().toLowerCase().contains(userInput)) {
-                    employeeListFiltered.add(employee);
-                }
-            }
-            employeeList = (ExpandableListView) view.findViewById(R.id.employees_listed);
-            ArrayList<String> employeeNames = getEmployeeNames(employeeListFiltered);
-            employeeInformation = getEmployeeInformation(employeeListFiltered);
-            adapter = new EmployeeListAdapter(getContext(),employeeNames,employeeInformation);
-            employeeList.setAdapter(adapter);
+        ArrayList<ArrayList<String>> results = db.searchDatabase(userInput, filter, db.getEmployeeTable());
+        for(int a = 0; a < results.size(); a++){
+            employeeListFiltered.add(new EmployeeItem(results.get(a)));
         }
-        //Cell Phone
-        else if(spinnerSelection == 2)
-        {
-            for(EmployeeItem employee : employees) {
-                if (employee.getPhoneNumber().toLowerCase().contains(userInput)) {
-                    employeeListFiltered.add(employee);
-                }
-            }
-            employeeList = (ExpandableListView) view.findViewById(R.id.employees_listed);
-            ArrayList<String> employeeNames = getEmployeeNames(employeeListFiltered);
-            employeeInformation = getEmployeeInformation(employeeListFiltered);
-            adapter = new EmployeeListAdapter(getContext(),employeeNames,employeeInformation);
-            employeeList.setAdapter(adapter);
-        }
-        // email
-        else if(spinnerSelection == 3)
-        {
-            for(EmployeeItem employee : employees) {
-                if (employee.getEmail().toLowerCase().contains(userInput)) {
-                    employeeListFiltered.add(employee);
-                }
-            }
-            employeeList = (ExpandableListView) view.findViewById(R.id.employees_listed);
-            ArrayList<String> employeeNames = getEmployeeNames(employeeListFiltered);
-            employeeInformation = getEmployeeInformation(employeeListFiltered);
-            adapter = new EmployeeListAdapter(getContext(),employeeNames,employeeInformation);
-            employeeList.setAdapter(adapter);
-        }
-        else
-            {
-            for(EmployeeItem employee : employees) {
-                if (employee.getName().toLowerCase().contains(userInput)) {
-                    employeeListFiltered.add(employee);
-                }
-            }
-            employeeList = (ExpandableListView) view.findViewById(R.id.employees_listed);
-            ArrayList<String> employeeNames = getEmployeeNames(employeeListFiltered);
-            employeeInformation = getEmployeeInformation(employeeListFiltered);
-            adapter = new EmployeeListAdapter(getContext(),employeeNames,employeeInformation);
-            employeeList.setAdapter(adapter);
-        }
+
+        employeeList = (ExpandableListView) view.findViewById(R.id.employees_listed);
+        ArrayList<String> employeeNames = getEmployeeNames(employeeListFiltered);
+        employeeInformation = getEmployeeInformation(employeeListFiltered);
+        adapter = new EmployeeListAdapter(getContext(),employeeNames,employeeInformation);
+        employeeList.setAdapter(adapter);
+
         return false;
     }
 
