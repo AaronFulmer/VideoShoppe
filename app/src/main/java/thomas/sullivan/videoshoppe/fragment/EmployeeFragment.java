@@ -153,7 +153,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                         } else {
                                             if (tempAdmin.isChecked()) {
                                                 if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
-                                                        tempPassword.getText().toString(), 1, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
+                                                        tempPassword.getText().toString(), true, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
                                                     Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
                                                     editor.dismiss();
                                                 } else {
@@ -162,7 +162,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                                 }
                                             } else {
                                                 if (db.createEmployee(tempEmployeeID, tempLastName.getText().toString(), tempFirstName.getText().toString(), tempUsername.getText().toString(),
-                                                        tempPassword.getText().toString(), 0, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
+                                                        tempPassword.getText().toString(), false, tempPhoneNumber.getText().toString(), tempEmail.getText().toString())) {
                                                     Toast.makeText(getContext(), "Employee Updated.", Toast.LENGTH_SHORT).show();
                                                     editor.dismiss();
 
@@ -391,7 +391,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                 } else {
                                     if(tempAdmin.isChecked())
                                     {
-                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),1,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),true,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
                                         {
                                             Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
@@ -400,7 +400,7 @@ public class EmployeeFragment extends Fragment implements android.widget.SearchV
                                             dialog.dismiss();
                                         }
                                     } else {
-                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),0,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
+                                        if(db.createEmployee(tempID.getText().toString(),tempLastName.getText().toString(),tempFirstName.getText().toString(),tempUsername.getText().toString(),tempPassword.getText().toString(),false,tempPhoneNumber.getText().toString(),tempEmail.getText().toString()))
                                         {
                                             Toast.makeText(getContext(),"Employee had been added.", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
