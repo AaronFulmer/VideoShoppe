@@ -46,6 +46,14 @@
         <item>Card</item>
     </string-array>
 
+    <string-array name="inventory_filters">
+        <item>Name</item>
+        <item>ID</item>
+        <item>Director</item>
+        <item>Genre</item>
+        <item>Release Year</item>
+    </string-array>
+
 
     <string name="action_clear_all">Clear All</string>
     <string name="action_logout">Logout</string>

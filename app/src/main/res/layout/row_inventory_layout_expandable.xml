@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@color/colorAccent"
+    android:weightSum="100">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="10"
+        android:background="@color/colorAccent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/lstDvdUPCCode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="TEST ADMIN"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/lstDvdReleaseYear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="TEST ADMIN"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/lstDvdDirector"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="TEST ADMIN"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/lstDvdGenre"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="TEST ADMIN"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/lstDvdCondition"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="TEST ADMIN"
+            android:textSize="15dip" />
+
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="90"
+        android:background="@color/colorAccent"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <ImageButton
+            android:id="@+id/btnEditDVD"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="50"
+            android:background="#00ffffff"
+            android:scaleType="fitXY"
+            android:src="@drawable/baseline_edit_24"
+            android:tint="@color/colorPrimary" />
+
+
+        <ImageButton
+            android:id="@+id/btnDeleteDVD"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="50"
+            android:background="#00ffffff"
+            android:scaleType="fitXY"
+            android:src="@drawable/baseline_delete_forever_24"
+            android:tint="#d11a2a" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

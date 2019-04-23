@@ -3,12 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="thomas.sullivan.videoshoppe.fragment.InventoryFragment">
+    android:background="@color/colorAccent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="thomas.sullivan.videoshoppe.fragment.EmployeeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/dvdFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/baseline_add_24"
+        android:tint="@color/colorAccent" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <SearchView
+                android:id="@+id/action_search_inventory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="35"
+                android:background="@color/colorAccent"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search Employees" />
+
+            <Spinner
+                android:id="@+id/inventoryFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:padding="3dp"
+                android:spinnerMode="dropdown"></Spinner>
+
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/lstInventory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ExpandableListView>
+
+    </LinearLayout>
 
 </FrameLayout>

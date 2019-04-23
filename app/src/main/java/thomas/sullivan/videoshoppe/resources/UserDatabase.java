@@ -222,6 +222,25 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public boolean createDvd(String upc, String movieId, String movieName, String director, Boolean condition,
+                             String releaseDate, String genre){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(dvdUPCCode, upc);
+        c.put(dvdMovieID, movieId);
+        c.put(dvdName, movieName);
+        c.put(dvdDirector, director);
+        c.put(dvdCondition, (condition)? "good" : "bad");
+        c.put(dvdReleaseDate, releaseDate);
+        c.put(dvdGenre, genre);
+
+        long result = db.insert(dvdTable, null, c);
+        if(result == -1){
+            return false;
+        }
+        return true;
+    }
+
     public void wipeDatabase()
     {
         onUpgrade(this.getWritableDatabase(), 1, 1);
@@ -267,6 +286,11 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getAllDVDs(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + dvdTable, null);
+        return res;
+    }
 
     public Cursor getAllEmployeeData() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -328,6 +352,22 @@ public class UserDatabase extends SQLiteOpenHelper {
         return strings;
     }
 
+    public String[] inventoryRowReturn(String upc){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] strings = new String[7];
+        String[] columns = getDvdAttributes();
+        String where = dvdUPCCode + " = ?";
+        String[] args = {upc};
+        Cursor res = db.query(dvdTable, columns, where, args, null, null, null);
+
+        if(res.moveToFirst()){
+            for(int a = 0; a < 7; a++){
+                strings[a] = res.getString(a);
+            }
+        }
+        return strings;
+    }
+
     public String[]customerRowReturn(String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -377,6 +417,19 @@ public class UserDatabase extends SQLiteOpenHelper {
             return false;
         }
 
+    }
+
+    public boolean removeDvd(String upc){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] columns = {dvdUPCCode};
+        String where = dvdUPCCode + " = ?";
+        String[] args = {upc};
+        Cursor res = db.query(dvdTable, columns, where, args, null, null, null);
+        if(res.moveToFirst()){
+            db.execSQL("DELETE FROM " + dvdTable + " WHERE " + dvdUPCCode + " = '" + upc + "'");
+            return true;
+        }
+        return false;
     }
 
     //returns true if the user is deleted; Returns false if user is non-existent.
