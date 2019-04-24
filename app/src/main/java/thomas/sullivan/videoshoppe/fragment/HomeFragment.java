@@ -2,6 +2,7 @@ package thomas.sullivan.videoshoppe.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,11 +20,15 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import thomas.sullivan.videoshoppe.activity.R;
 import thomas.sullivan.videoshoppe.resources.IntValueFormatter;
+import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +43,7 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    UserDatabase db;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -47,18 +52,36 @@ public class HomeFragment extends Fragment {
     Calendar calendar;
 
     // Calender information
-    private String currentDayString;
-    private int currentDayInt;
-    private int sundayCount;
-    private int mondayCount;
-    private int tuesdayCount;
-    private int wednesdayCount;
-    private int thursdayCount;
-    private int fridayCount;
-    private int saturdayCount;
-    private int thirtyDayCounter;
-    private int thirtyDayDisplay;
-    private int rentalsInDay;
+//    private String currentDayString;
+//    private int currentDayInt;
+//    private int sundayCount;
+//    private int mondayCount;
+//    private int tuesdayCount;
+//    private int wednesdayCount;
+//    private int thursdayCount;
+//    private int fridayCount;
+//    private int saturdayCount;
+//    private int thirtyDayCounter;
+//    private int thirtyDayDisplay;
+//    private int rentalsInDay;
+
+
+
+    private String currentMonthString;
+    private int currentMonth;
+    private int currentYear;
+    private int january;
+    private int february;
+    private int march;
+    private int april;
+    private int may;
+    private int june;
+    private int july;
+    private int august;
+    private int septempber;
+    private int october;
+    private int november;
+    private int december;
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,15 +110,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = new UserDatabase(this.getContext());
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         //Calendar
+        final DateFormat d = new SimpleDateFormat("yyyy");
         calendar = Calendar.getInstance();
-        currentDayInt = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.setTime(new Date()); // Now use today date.
+        //currentDayInt = calendar.get(Calendar.DAY_OF_WEEK);
+        currentMonth = calendar.get(Calendar.MONTH);
 
+        currentYear = Integer.parseInt(d.format(calendar.getTime()));
     }
 
     public void createChart()
@@ -113,45 +142,67 @@ public class HomeFragment extends Fragment {
     public void calendarRun()
     {
         //Sets currentDay to the day of the week
-        switch(currentDayInt)
+        switch(currentMonth)
         {
             case 1:
-                currentDayString = "Sunday";
-                sundayCount = 0;
-                sundayCount += rentalsInDay;
+                currentMonthString = "February";
+                february = 0;
+                february += db.getRentals(currentMonth, currentYear);
                 break;
             case 2:
-                currentDayString = "Monday";
-                mondayCount = 0;
-                mondayCount += rentalsInDay;
+                currentMonthString = "March";
+                march = 0;
+                march += db.getRentals(currentMonth, currentYear);
                 break;
             case 3:
-                currentDayString = "Tuesday";
-                tuesdayCount = 0;
-                tuesdayCount += rentalsInDay;
+                currentMonthString = "April";
+                april = 0;
+                april += db.getRentals(currentMonth, currentYear);
                 break;
             case 4:
-                currentDayString = "Wednesday";
-                wednesdayCount = 0;
-                wednesdayCount += rentalsInDay;
+                currentMonthString = "May";
+                may = 0;
+                may += db.getRentals(currentMonth, currentYear);
                 break;
             case 5:
-                currentDayString = "Thursday";
-                thursdayCount = 0;
-                thursdayCount += rentalsInDay;
+                currentMonthString = "June";
+                june = 0;
+                june += db.getRentals(currentMonth, currentYear);
                 break;
             case 6:
-                currentDayString = "Friday";
-                fridayCount = 0;
-                fridayCount += rentalsInDay;
+                currentMonthString = "July";
+                july = 0;
+                july += db.getRentals(currentMonth, currentYear);
                 break;
             case 7:
-                currentDayString = "Saturday";
-                saturdayCount = 0;
-                saturdayCount += rentalsInDay;
+                currentMonthString = "August";
+                august = 0;
+                august += db.getRentals(currentMonth, currentYear);
+                break;
+            case 8:
+                currentMonthString = "September";
+                septempber = 0;
+                septempber += db.getRentals(currentMonth, currentYear);
+                break;
+            case 9:
+                currentMonthString = "October";
+                october = 0;
+                october += db.getRentals(currentMonth, currentYear);
+                break;
+            case 10:
+                currentMonthString = "November";
+                november = 0;
+                november += db.getRentals(currentMonth, currentYear);
+                break;
+            case 11:
+                currentMonthString = "December";
+                december = 0;
+                december += db.getRentals(currentMonth, currentYear);
                 break;
             default:
-                currentDayString = "INVALID";
+                currentMonthString = "January";
+                january = 0;
+                january += db.getRentals(currentMonth, currentYear);
                 break;
         }
     }
@@ -162,7 +213,9 @@ public class HomeFragment extends Fragment {
         String[] dayNames = new String[7];
         ArrayList<BarEntry> yVals = new ArrayList<>();
 
-        int tempDate = currentDayInt;
+        int tempMonth = currentMonth;
+        int tempYear = currentYear;
+
         String tempDay = "";
         int arrayCounter = 0;
         boolean isFinished = false;
@@ -170,35 +223,55 @@ public class HomeFragment extends Fragment {
         while(isFinished == false)
         {
             int numberToAdd = -1;
-            switch(tempDate)
+            switch(tempMonth)
             {
+                case 0:
+                    tempDay = "Jan";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
+                    break;
                 case 1:
-                    tempDay = "Sun";
-                    numberToAdd = sundayCount;
+                    tempDay = "Feb";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 2:
-                    tempDay = "Mon";
-                    numberToAdd = mondayCount;
+                    tempDay = "Mar";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 3:
-                    tempDay = "Tues";
-                    numberToAdd = tuesdayCount;
+                    tempDay = "Apr";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 4:
-                    tempDay = "Wed";
-                    numberToAdd = wednesdayCount;
+                    tempDay = "May";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 5:
-                    tempDay = "Thurs";
-                    numberToAdd = thursdayCount;
+                    tempDay = "Jun";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 6:
-                    tempDay = "Fri";
-                    numberToAdd = fridayCount;
+                    tempDay = "Jul";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
                 case 7:
-                    tempDay = "Sat";
-                    numberToAdd = saturdayCount;
+                    tempDay = "Aug";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
+                    break;
+                case 8:
+                    tempDay = "Sep";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
+                break;
+                case 9:
+                    tempDay = "Oct";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
+                    break;
+                case 10:
+                    tempDay = "Nov";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
+                    break;
+                case 11:
+                    tempDay = "Dec";
+                    numberToAdd = db.getRentals(tempMonth, tempYear);
                     break;
             }
 
@@ -206,14 +279,15 @@ public class HomeFragment extends Fragment {
             intArray[6 - arrayCounter] = numberToAdd;
             dayNames[6 - arrayCounter] = tempDay;
 
-            dayNames[6] = "Today";
+            dayNames[6] = currentMonthString;
 
             // controls day #s
-            if(tempDate == 1)
+            if(tempMonth == 0)
             {
-                tempDate = 7;
+                tempMonth = 11;
+                tempYear -= 1;
             } else {
-                tempDate--;
+                tempMonth--;
             }
 
             arrayCounter++;
@@ -226,8 +300,7 @@ public class HomeFragment extends Fragment {
 
         for(int i=0;i<count; i++)
         {
-            int value = i+1;
-            yVals.add(new BarEntry(i, (int) value));
+            yVals.add(new BarEntry(i, intArray[i]));
         }
 
         BarDataSet set = new BarDataSet(yVals, "Data Set");

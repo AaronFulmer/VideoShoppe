@@ -73,6 +73,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String financeProfit = "profit";
     private static final String financeTransactionId = "transaction_number";
     private static final String financeTransactionDate = "date";
+    private static final String financeCustomer = "customer";
 
     private static String currentEmployeeFirstName = "";
     private static String currentEmployeeLastName = "";
@@ -144,7 +145,8 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + financeTransactionDate + " DATE, "
                 + financeRevenue + " DOUBLE, "
                 + financeExpenditures + " DOUBLE, "
-                + financeProfit + " DOUBLE);");
+                + financeProfit + " DOUBLE, "
+                + financeCustomer + " TEXT);");
 
         //if(!searchCredentials("ADMIN","ADMIN"))
         //{
@@ -538,6 +540,25 @@ public class UserDatabase extends SQLiteOpenHelper {
         c.moveToFirst();
         con.put(customerNumberOfRentals, c.getInt(0) - 1);
         db.update(customerTable, con, customerID + " = ?", new String[]{custId});
+    }
+
+    public void addTransaction(String id, String price, String custId, String date){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(financeTransactionId, id);
+        c.put(financeRevenue, price);
+        c.put(financeCustomer, custId);
+        c.put(financeTransactionDate, date);
+
+        db.insert(financeTable, null, c);
+    }
+
+    public int getRentals(int month, int year){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + financeTable + " WHERE " + financeTransactionDate + " LIKE '" + (month + 1) + "/%/" + year + "'" +
+                " OR " + financeTransactionDate + " LIKE '0" + (month + 1) + "/%/" + year + "'";
+        Cursor c = db.rawQuery(query, null);
+        return c.getCount();
     }
 
     public static String getEmployeeTable() {

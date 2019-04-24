@@ -306,7 +306,12 @@ public class MoviesFragment extends Fragment implements android.widget.SearchVie
 
                                         String[] custColumns = db.customerRowReturn(rentalColumns[1]);
                                         String cardNum = custColumns[4].substring(11);
-                                        INSERT TRANSACTION INTO THE FINANCE TABLE HERE
+
+                                        final DateFormat d = new SimpleDateFormat("MM/dd/yyyy");
+                                        final Calendar cal = Calendar.getInstance();
+                                        cal.setTime(new Date()); // Now use today date.
+
+                                        db.addTransaction(rentalColumns[0], rentalColumns[4], rentalColumns[1], d.format(cal.getTime()));
                                         Toast.makeText(getContext(), "Card ************" + cardNum + " charged $" + rentalColumns[4], Toast.LENGTH_SHORT).show();
                                     }
                                 });
