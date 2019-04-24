@@ -15,7 +15,7 @@
 
     <!-- Navigation Drawer menu labels -->
     <string name="nav_home">Home</string>
-    <string name="nav_movies">Movies</string>
+    <string name="nav_movies">Rentals</string>
     <string name="nav_customers">Customers</string>
     <string name="nav_inventory">Inventory</string>
     <string name="nav_employee">Employees</string>
@@ -24,7 +24,7 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
-        <item>Movies</item>
+        <item>Rentals</item>
         <item>Customers</item>
         <item>Inventory</item>
         <item>Employees</item>
@@ -52,6 +52,14 @@
         <item>Director</item>
         <item>Genre</item>
         <item>Release Year</item>
+    </string-array>
+
+    <string-array name="rental_filters">
+        <item>UPC Code</item>
+        <item>Check-Out Date</item>
+        <item>Check-In Date</item>
+        <item>Movie Name</item>
+        <item>Customer ID</item>
     </string-array>
 
 

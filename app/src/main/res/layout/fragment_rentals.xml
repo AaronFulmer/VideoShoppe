@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="thomas.sullivan.videoshoppe.fragment.MoviesFragment">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/checkIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="75dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@android:drawable/checkbox_on_background"
+        android:tint="@color/colorAccent" />
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/moviesfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/baseline_add_24"
+            android:tint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_margin="16dp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <SearchView
+                android:id="@+id/action_search_rentals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="35"
+                android:background="@color/colorAccent"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search Movies" />
+
+            <Spinner
+                android:id="@+id/rentalsFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:padding="3dp"
+                android:spinnerMode="dropdown"></Spinner>
+
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/lstRentals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ExpandableListView>
+
+    </LinearLayout>
+
+
+</FrameLayout>

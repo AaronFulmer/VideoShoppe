@@ -32,6 +32,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String customerEmail = "email";
     private static final String customerCardNumber = "cardNumber";   // Foreign Key
     private static final String customerPhoneNumber = "phoneNumber";
+    private static final String customerNumberOfRentals = "rentals";
 
     private static final String cardTable = "card";
     private static final String cardNumber = "number";
@@ -45,6 +46,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String rentalUPCCode = "UPCCode";             // Foreign Key
     private static final String rentalReturnDate = "returnDate";
     private static final String rentalPrice = "price";
+    private static final String rentalIsCheckedIn = "isCheckedIn";
 
     private static final String dvdTable = "dvd";
     private static final String dvdUPCCode = "UPCCode";                // Primary Key
@@ -54,6 +56,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String dvdDirector = "director";
     private static final String dvdGenre = "genre";
     private static final String dvdCondition = "condition";
+    private static final String dvdInStock = "in_stock";
 
     private static final String scheduleTable = "schedule";
     private static final String scheduleDateAndTime = "DateAndTime";   // Primary Key
@@ -100,7 +103,8 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + customerFirstName + " TEXT, "
                 + customerPhoneNumber + " TEXT, "
                 + customerEmail + " TEXT, "
-                + customerCardNumber + " TEXT);");
+                + customerCardNumber + " TEXT, "
+                + customerNumberOfRentals + " INTEGER);");
 
         sqLiteDB.execSQL("CREATE TABLE " + dvdTable + " ("
                 + dvdUPCCode + " TEXT PRIMARY KEY, "
@@ -109,7 +113,8 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + dvdDirector + " TEXT, "
                 + dvdCondition + " TEXT, "
                 + dvdReleaseDate + " TEXT, "
-                + dvdGenre + " TEXT);");
+                + dvdGenre + " TEXT, "
+                + dvdInStock + " INTEGER);");
 
         sqLiteDB.execSQL("CREATE TABLE " + cardTable + " ("
                 + cardNumber + " TEXT PRIMARY KEY, "
@@ -122,7 +127,8 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + rentalCustomerID + " TEXT, "
                 + rentalUPCCode + " TEXT, "
                 + rentalReturnDate + " TEXT, "
-                + rentalPrice + " TEXT);");
+                + rentalPrice + " TEXT, "
+                + rentalIsCheckedIn + " INTEGER);");
 
         sqLiteDB.execSQL("CREATE TABLE " + scheduleTable + " ("
                 + scheduleDateAndTime + " DATE PRIMARY KEY, "
@@ -140,10 +146,10 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + financeExpenditures + " DOUBLE, "
                 + financeProfit + " DOUBLE);");
 
-        if(!searchCredentials("ADMIN","ADMIN"))
-        {
-            createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",true, "555-555-5555","administrator123@test.com");
-        }
+        //if(!searchCredentials("ADMIN","ADMIN"))
+        //{
+        //    createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",true, "555-555-5555","administrator123@test.com");
+        //}
 
     }
 
@@ -233,6 +239,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         c.put(dvdCondition, (condition)? "good" : "bad");
         c.put(dvdReleaseDate, releaseDate);
         c.put(dvdGenre, genre);
+        c.put(dvdInStock, 1);
 
         long result = db.insert(dvdTable, null, c);
         if(result == -1){
@@ -304,6 +311,12 @@ public class UserDatabase extends SQLiteOpenHelper {
         return res;
     }
 
+    public Cursor getAllRentals(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor r = db.rawQuery("SELECT * FROM " + rentalTable, null);
+        return r;
+    }
+
     public Boolean insertIntoTable(String table, String[] columns, String[] values){
         ContentValues c = new ContentValues();
         for(int a = 0; a < values.length; a++){
@@ -354,16 +367,28 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public String[] inventoryRowReturn(String upc){
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] strings = new String[7];
+        String[] strings = new String[8];
         String[] columns = getDvdAttributes();
         String where = dvdUPCCode + " = ?";
         String[] args = {upc};
-        Cursor res = db.query(dvdTable, columns, where, args, null, null, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + dvdTable + " WHERE " + dvdUPCCode + " = ?", args);
 
         if(res.moveToFirst()){
-            for(int a = 0; a < 7; a++){
+            for(int a = 0; a < 8; a++){
                 strings[a] = res.getString(a);
             }
+        }
+        return strings;
+    }
+
+    public String[] rentalRowReturn(String upc){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] strings = new String[6];
+        Cursor res = db.rawQuery("SELECT * FROM " + rentalTable + " WHERE " + rentalUPCCode + " = ? AND " + rentalIsCheckedIn + " = 0", new String[]{upc});
+        if(res.moveToFirst()){
+           for(int a = 0; a < 6; a++){
+               strings[a] = res.getString(a);
+           }
         }
         return strings;
     }
@@ -461,6 +486,60 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    public boolean addRental(String upc, String custId, String returnDate, String checkOutDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] columns = getRentalAttributes();
+        int rId = (int)(Math.random() * 100000);
+        ContentValues c = new ContentValues();
+
+        c.put(columns[0], rId);
+        c.put(columns[1], custId);
+        c.put(columns[2], upc);
+        c.put(columns[3], returnDate);
+        c.put(columns[4], 7);
+        c.put(rentalIsCheckedIn, 0);
+        long result = db.insert(rentalTable, null, c);
+        if(result == -1){
+            return false;
+        }
+        return true;
+    }
+
+    public Cursor getNumOfRentals(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {customerNumberOfRentals};
+        String where = customerID + " = ?";
+        String[] args = {id};
+        Cursor c = db.query(customerTable, columns, where, args, null, null, null);
+        return c;
+    }
+
+    public void incrementRentals(String custId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = getNumOfRentals(custId);
+        ContentValues con = new ContentValues();
+        c.moveToFirst();
+        con.put(customerNumberOfRentals, c.getInt(0) + 1);
+        db.update(customerTable, con,customerID + " = ?", new String[]{custId});
+    }
+
+    public void changeStatus(String upc, boolean inStock){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(dvdInStock, (inStock)? 1 : 0);
+        db.update(dvdTable, c, dvdUPCCode + " = ?", new String[]{upc});
+    }
+
+    public void decrementRentals(String custId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = getNumOfRentals(custId);
+        ContentValues con = new ContentValues();
+        c.moveToFirst();
+        con.put(customerNumberOfRentals, c.getInt(0) - 1);
+        db.update(customerTable, con, customerID + " = ?", new String[]{custId});
+    }
+
     public static String getEmployeeTable() {
         return employeeTable;
     }
@@ -503,7 +582,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public static String[] getDvdAttributes(){
         return new String[]{dvdUPCCode, dvdMovieID, dvdName, dvdDirector, dvdCondition, dvdReleaseDate,
-                dvdGenre};
+                dvdGenre, dvdInStock};
     }
 
     public static String[] getCardAttributes(){
@@ -511,6 +590,10 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     public static String[] getRentalAttributes(){
+        return new String[]{rentalID, rentalCustomerID, rentalUPCCode, rentalReturnDate, rentalPrice, rentalIsCheckedIn};
+    }
+
+    public static String[] getScheduleAttributes(){
         return new String[]{scheduleDateAndTime, scheduleEmployeeId, scheduleHours};
     }
 

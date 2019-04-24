@@ -14,6 +14,7 @@ public class CustomerItem {
     public String expirationDate;
     public String securityCode;
     public String cardType;
+    int numberOfRentals;
 
     public CustomerItem(String aFirstName, String aLastName, String aID, String aPhoneNumber, String aEmail, String aCardNumber, String aExpiration, String aSecurity, String aType) {
         this.firstName = aFirstName;
@@ -36,6 +37,7 @@ public class CustomerItem {
     public String getExpirationDate(){return this.expirationDate;}
     public String getSecurityCode(){return this.securityCode;}
     public String getCardType(){return this.cardType;}
+    public int getNumberOfRentals(){return numberOfRentals;}
 
     public String getName() {return lastName+", "+firstName;}
 
@@ -66,5 +68,6 @@ public class CustomerItem {
     public void setCardType(String a){
         this.cardType = a;
     }
+    public void setNumberOfRentals(int a) { this.numberOfRentals = a; }
 
 }

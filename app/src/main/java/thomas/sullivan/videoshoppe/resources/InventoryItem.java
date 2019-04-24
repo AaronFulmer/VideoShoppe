@@ -9,6 +9,7 @@ public class InventoryItem {
     String dvdDirector = "";
     String dvdGenre = "";
     String dvdCondition = "";
+    boolean checkedOut;
 
     public InventoryItem(){}
 
@@ -48,4 +49,6 @@ public class InventoryItem {
     public String getDvdCondition() {
         return dvdCondition;
     }
+
+    public boolean getCheckedOut(){ return checkedOut; }
 }
