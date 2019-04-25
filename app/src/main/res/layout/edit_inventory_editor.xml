@@ -14,10 +14,10 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="Edit DVD"
+        android:text="Edit Movie"
+        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
-        android:textSize="17sp"
-        android:textStyle="bold" />
+        android:textSize="17sp" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,20 +32,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_weight="66.6"
             android:gravity="end"
-            android:text="Name:"
+            android:text="UPC Code:"
+            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:layout_weight="66.6"/>
 
         <EditText
-            android:id="@+id/txtMovieName"
+            android:id="@+id/edit_movie_code"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="33.3"
+            android:maxLines="1"
             android:hint="test"
-            android:maxLines="1" />
+            android:layout_height="wrap_content"
+            android:layout_weight="33.3"/>
 
     </LinearLayout>
     <LinearLayout
@@ -61,20 +61,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_weight="66.6"
             android:gravity="end"
-            android:text="UPC Code:"
+            android:text="Title:"
+            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:layout_weight="66.6"/>
 
         <EditText
-            android:id="@+id/txtUPCCode"
+            android:id="@+id/edit_movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="33.3"
             android:hint="test"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:layout_weight="33.3"/>
 
     </LinearLayout>    <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,48 +89,20 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_weight="66.6"
-        android:gravity="end"
-        android:text="Movie ID:"
-        android:textColor="@color/colorPrimary"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/txtMovieID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3"
-        android:hint="test"
-        android:maxLines="1" />
-
-</LinearLayout>    <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
-    android:orientation="horizontal"
-    android:weightSum="100">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:layout_weight="66.6"
         android:gravity="end"
         android:text="Release Date:"
+        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:layout_weight="66.6"/>
 
     <EditText
-        android:id="@+id/txtReleaseDate"
+        android:id="@+id/edit_movie_releasedate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="33.3"
         android:hint="test"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:layout_weight="33.3"/>
 
 </LinearLayout>    <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -145,48 +117,20 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_weight="66.6"
-        android:gravity="end"
-        android:text="Genre:"
-        android:textColor="@color/colorPrimary"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/txtGenre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3"
-        android:hint="test"
-        android:maxLines="1" />
-
-</LinearLayout>    <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
-    android:orientation="horizontal"
-    android:weightSum="100">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:layout_weight="66.6"
         android:gravity="end"
         android:text="Director:"
+        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:layout_weight="66.6"/>
 
     <EditText
-        android:id="@+id/txtDirector"
+        android:id="@+id/edit_movie_director"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3"
+        android:maxLines="1"
         android:hint="test"
-        android:maxLines="1" />
+        android:layout_height="wrap_content"
+        android:layout_weight="33.3"/>
 
 </LinearLayout>    <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -201,23 +145,81 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_weight="66.6"
         android:gravity="end"
-        android:maxLines="1"
-        android:text="Good Condition:"
+        android:text="Actors:"
+        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:layout_weight="66.6"/>
 
-    <CheckBox
-        android:id="@+id/chkGoodCondition"
+    <EditText
+        android:id="@+id/edit_movie_actors"
+        android:hint="test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="33.3"
-        android:buttonTint="@color/colorPrimary"
-        android:gravity="center_vertical" />
+        android:layout_weight="33.3"/>
 
 </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:gravity="end"
+            android:text="Genre:"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:layout_weight="66.6"/>
+
+        <EditText
+            android:id="@+id/edit_movie_genre"
+            android:layout_width="match_parent"
+            android:maxLines="1"
+            android:layout_height="wrap_content"
+            android:hint="test"
+            android:layout_weight="33.3"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:gravity="end"
+            android:text="Condition:"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:layout_weight="66.6"/>
+
+        <EditText
+            android:id="@+id/edit_movie_condition"
+            android:layout_width="match_parent"
+            android:hint="test"
+            android:maxLines="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="33.3"/>
+
+    </LinearLayout>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -233,26 +235,26 @@
         android:weightSum="100">
 
         <Button
-            android:id="@+id/btnInvEditCancel"
+            android:id="@+id/edit_movie_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:layout_weight="50"
-            android:background="@color/colorPrimary"
             android:gravity="center"
+            android:layout_weight="50"
+            android:layout_marginRight="8dp"
             android:text="Cancel"
-            android:textColor="@color/colorAccent" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorAccent"/>
 
         <Button
-            android:id="@+id/btnInvEditConfirm"
+            android:id="@+id/edit_movie_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_weight="50"
-            android:background="@color/colorPrimary"
             android:gravity="center"
+            android:layout_weight="50"
             android:text="Confirm"
-            android:textColor="@color/colorAccent" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
 

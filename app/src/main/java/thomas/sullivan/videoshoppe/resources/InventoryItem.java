@@ -1,54 +1,62 @@
 package thomas.sullivan.videoshoppe.resources;
 
+
+import java.util.List;
+
 public class InventoryItem {
 
-    String dvdUpc = "";
-    String dvdName = "";
-    String dvdId = "";
-    String dvdReleaseDate = "";
-    String dvdDirector = "";
-    String dvdGenre = "";
-    String dvdCondition = "";
-    boolean checkedOut;
+    public String upcCode;
+    public String name;
+    public String iD;
+    public String releaseDate;
+    public String director;
+    public String actors;
+    public String genre;
+    public String condition;
 
-    public InventoryItem(){}
-
-    public InventoryItem(String upc, String name, String id, String releaseDate, String director, String genre, String condition){
-        dvdUpc = upc;
-        dvdName = name;
-        dvdId = id;
-        dvdReleaseDate = releaseDate;
-        dvdDirector = director;
-        dvdGenre = genre;
-        dvdCondition = condition;
-    }
-    public String getDvdUpc() {
-        return dvdUpc;
+    public InventoryItem(String aUPC, String aName, String aID, String aReleaseDate, String aDirector, String aActors, String aGenre, String aCondition) {
+        this.upcCode = aUPC;
+        this.name = aName;
+        this.iD = aID;
+        this.releaseDate = aReleaseDate;
+        this.director = aDirector;
+        this.actors = aActors;
+        this.genre = aGenre;
+        this.condition = aCondition;
     }
 
-    public String getDvdName() {
-        return dvdName;
+    public String getUPCCode(){return this.upcCode;}
+    public String getTitle(){return this.name;}
+    public String getiD(){return this.iD;}
+    public String getReleaseDate(){return this.releaseDate;}
+    public String getDirector(){return this.director;}
+    public String getActors(){return this.actors;}
+    public String getGenre(){return this.genre;}
+    public String getCondition(){return this.condition;}
+
+    public void setUPCCode(String a){
+        this.upcCode = a;
+    }
+    public void setTitle(String a){
+        this.name = a;
+    }
+    public void setiD(String a){
+        this.iD = a;
+    }
+    public void setReleaseDate(String a){
+        this.releaseDate = a;
+    }
+    public void setDirector(String a){
+        this.director = a;
+    }
+    public void setActors(String a){
+        this.actors = a;
+    }
+    public void setGenre(String a){
+        this.genre = a;
+    }
+    public void setCondition(String a){
+        this.condition = a;
     }
 
-    public String getDvdId() {
-        return dvdId;
-    }
-
-    public String getDvdReleaseDate() {
-        return dvdReleaseDate;
-    }
-
-    public String getDvdDirector() {
-        return dvdDirector;
-    }
-
-    public String getDvdGenre() {
-        return dvdGenre;
-    }
-
-    public String getDvdCondition() {
-        return dvdCondition;
-    }
-
-    public boolean getCheckedOut(){ return checkedOut; }
 }

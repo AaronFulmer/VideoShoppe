@@ -54,6 +54,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String dvdMovieID = "id";
     private static final String dvdReleaseDate = "releaseDate";
     private static final String dvdDirector = "director";
+    private static final String dvdActors = "actors";
     private static final String dvdGenre = "genre";
     private static final String dvdCondition = "condition";
     private static final String dvdInStock = "in_stock";
@@ -62,10 +63,6 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String scheduleDateAndTime = "DateAndTime";   // Primary Key
     private static final String scheduleEmployeeId = "employeeID";     // Foreign Key
     private static final String scheduleHours = "Hours";
-
-    private static final String actorsTable = "actors";
-    private static final String actorsName = "name";
-    private static final String actorsMovieID = "movie_id";
 
     private static final String financeTable = "finances";
     private static final String financeExpenditures = "expenditures";
@@ -112,6 +109,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + dvdMovieID + " TEXT, "
                 + dvdName + " TEXT, "
                 + dvdDirector + " TEXT, "
+                + dvdActors + " TEXT, "
                 + dvdCondition + " TEXT, "
                 + dvdReleaseDate + " TEXT, "
                 + dvdGenre + " TEXT, "
@@ -136,10 +134,6 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + scheduleEmployeeId + " TEXT, "
                 + scheduleHours + " TEXT);");
 
-        sqLiteDB.execSQL("CREATE TABLE " + actorsTable + " ("
-                + actorsMovieID + " TEXT, "
-                + actorsName + " TEXT);");
-
         sqLiteDB.execSQL("CREATE TABLE " + financeTable + " ("
                 + financeTransactionId + " TEXT PRIMARY KEY, "
                 + financeTransactionDate + " DATE, "
@@ -160,7 +154,6 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS "+employeeTable);
         db.execSQL("DROP TABLE IF EXISTS "+customerTable);
-        db.execSQL("DROP TABLE IF EXISTS "+actorsTable);
         db.execSQL("DROP TABLE IF EXISTS "+dvdTable);
         db.execSQL("DROP TABLE IF EXISTS "+rentalTable);
         db.execSQL("DROP TABLE IF EXISTS "+scheduleTable);
@@ -170,6 +163,22 @@ public class UserDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void wipeMovies()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS "+dvdTable);
+        db.execSQL("CREATE TABLE " + dvdTable + " ("
+                + dvdUPCCode + " TEXT PRIMARY KEY, "
+                + dvdMovieID + " TEXT, "
+                + dvdName + " TEXT, "
+                + dvdDirector + " TEXT, "
+                + dvdActors + " TEXT, "
+                + dvdCondition + " TEXT, "
+                + dvdReleaseDate + " TEXT, "
+                + dvdGenre + " TEXT, "
+                + dvdInStock + " INTEGER);");
+
+    }
 
     public boolean createEmployee(String ID, String lastName, String firstName, String username,
                                   String password, boolean admin, String cellPhoneNumber, String email )
@@ -230,17 +239,18 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean createDvd(String upc, String movieId, String movieName, String director, Boolean condition,
-                             String releaseDate, String genre){
+    public boolean createDvd(String upc, String movieId, String movieName, String director, String condition,
+                             String releaseDate, String genre, String actors){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues c = new ContentValues();
         c.put(dvdUPCCode, upc);
         c.put(dvdMovieID, movieId);
         c.put(dvdName, movieName);
         c.put(dvdDirector, director);
-        c.put(dvdCondition, (condition)? "good" : "bad");
+        c.put(dvdCondition, condition);
         c.put(dvdReleaseDate, releaseDate);
         c.put(dvdGenre, genre);
+        c.put(dvdActors, actors);
         c.put(dvdInStock, 1);
 
         long result = db.insert(dvdTable, null, c);
@@ -377,7 +387,13 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         if(res.moveToFirst()){
             for(int a = 0; a < 8; a++){
-                strings[a] = res.getString(a);
+                strings[0] = res.getString(res.getColumnIndex(dvdName));
+                strings[1] = res.getString(res.getColumnIndex(dvdMovieID));
+                strings[2] = res.getString(res.getColumnIndex(dvdReleaseDate));
+                strings[3] = res.getString(res.getColumnIndex(dvdDirector));
+                strings[4] = res.getString(res.getColumnIndex(dvdActors));
+                strings[5] = res.getString(res.getColumnIndex(dvdGenre));
+                strings[6] = res.getString(res.getColumnIndex(dvdCondition));
             }
         }
         return strings;
@@ -585,9 +601,6 @@ public class UserDatabase extends SQLiteOpenHelper {
         return scheduleTable;
     }
 
-    public static String getActorsTable() {
-        return actorsTable;
-    }
 
     public static String getFinanceTable(){ return financeTable; }
 
@@ -616,10 +629,6 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public static String[] getScheduleAttributes(){
         return new String[]{scheduleDateAndTime, scheduleEmployeeId, scheduleHours};
-    }
-
-    public static String[] getActorsAttributes(){
-        return new String[]{actorsMovieID, actorsName};
     }
 
     public static String[] getFinanceAttributes(){
