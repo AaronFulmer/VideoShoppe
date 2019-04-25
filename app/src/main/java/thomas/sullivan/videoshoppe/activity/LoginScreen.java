@@ -27,7 +27,7 @@ public class LoginScreen extends AppCompatActivity {
         btnLogin = (Button)findViewById(R.id.button_Login);
 
         //database.wipeDatabase();
-        //database.createEmployee("ADMIN","Doe","John","ADMIN","ADMIN",true, "555-555-5555","administrator123@test.com");
+        //database.wipeMovies();
         login();
 
     }

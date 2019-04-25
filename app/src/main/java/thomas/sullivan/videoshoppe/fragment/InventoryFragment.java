@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import thomas.sullivan.videoshoppe.activity.R;
-import thomas.sullivan.videoshoppe.resources.CustomerItem;
 import thomas.sullivan.videoshoppe.resources.InventoryItem;
 import thomas.sullivan.videoshoppe.resources.UserDatabase;
 
@@ -56,7 +55,7 @@ public class InventoryFragment extends Fragment implements android.widget.Search
         Context context;
 
         public InventoryListAdapter(Context context, ArrayList<String> aparents,
-                                   HashMap<String, ArrayList<String>> achildren) {
+                                    HashMap<String, ArrayList<String>> achildren) {
             this.context = context;
             this.parents = aparents;
             this.children = achildren;
@@ -77,12 +76,12 @@ public class InventoryFragment extends Fragment implements android.widget.Search
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
 
-            final String director = (String) getChild(groupPosition, 2);
-            final String releaseYear = (String) getChild(groupPosition, 3);
-            final String condition = (String) getChild(groupPosition, 5);
-            final String upcCode = (String) getChild(groupPosition, 0);
-            final String genre = (String) getChild(groupPosition, 4);
-            final String movieId = (String) getChild(groupPosition, 1);
+            final String idText = (String) getChild(groupPosition, 0);
+            final String releaseDateText = (String) getChild(groupPosition, 1);
+            final String genreText = (String) getChild(groupPosition, 2);
+            final String conditionText = (String) getChild(groupPosition, 3);
+            final String directorText = (String) getChild(groupPosition, 4);
+            final String actorsText = (String) getChild(groupPosition, 5);
 
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -90,84 +89,77 @@ public class InventoryFragment extends Fragment implements android.widget.Search
                 convertView = infalInflater.inflate(R.layout.row_inventory_layout_expandable, null);
             }
 
-            TextView txtDirector = (TextView) convertView.findViewById(R.id.lstDvdDirector);
-            TextView txtReleaseYear = (TextView) convertView.findViewById(R.id.lstDvdReleaseYear);
-            TextView txtCondition = (TextView) convertView.findViewById(R.id.lstDvdCondition);
-            TextView txtGenre = (TextView) convertView.findViewById(R.id.lstDvdGenre);
-            TextView txtUPCCode = (TextView) convertView.findViewById(R.id.lstDvdUPCCode);
+            TextView id = (TextView) convertView.findViewById(R.id.inventoryListID);
+            TextView releaseDate = (TextView) convertView.findViewById(R.id.inventoryListReleaseDate);
+            TextView genre = (TextView) convertView.findViewById(R.id.inventoryListGenre);
+            TextView condition = (TextView) convertView.findViewById(R.id.inventoryListCondition);
+            TextView director = (TextView) convertView.findViewById(R.id.inventoryListDirector);
+            TextView actors = (TextView) convertView.findViewById(R.id.inventoryListActors);
 
-            final String upc = inventory.get(currentSelectedGroup).getDvdUpc();
-            final String movieName = inventory.get(currentSelectedGroup).getDvdName();
-            txtDirector.setText(director);
-            txtReleaseYear.setText(releaseYear);
-            txtCondition.setText(condition);
-            txtUPCCode.setText(upcCode);
-            txtGenre.setText(genre);
+            id.setText(idText);
+            releaseDate.setText(releaseDateText);
+            director.setText(directorText);
+            actors.setText(actorsText);
+            genre.setText(genreText);
+            condition.setText(conditionText);
 
-//            final String tempCustomerID = customers.get(currentSelectedGroup).getiD();
-//            final String tempName = customers.get(currentSelectedGroup).getFirstName()+" "+customers.get(currentSelectedGroup).getLastName();
+            final String tempMovieUPC = movies.get(currentSelectedGroup).getUPCCode();
+            final String tempTitle = movies.get(currentSelectedGroup).getTitle();
 
-            ImageButton deleteMain = (ImageButton) convertView.findViewById(R.id.btnDeleteDVD);
-            ImageButton editMain = (ImageButton) convertView.findViewById(R.id.btnEditDVD);
+            ImageButton deleteMain = (ImageButton) convertView.findViewById(R.id.delete_inventory_button);
+            ImageButton editMain = (ImageButton) convertView.findViewById(R.id.edit_inventory_button);
 
             editMain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder editorInventoryDialog = new AlertDialog.Builder(getContext());
+                    final AlertDialog.Builder editorCustomerDialog = new AlertDialog.Builder(getContext());
                     final View view3 = getLayoutInflater().inflate(R.layout.edit_inventory_editor, null);
-                    editorInventoryDialog.setView(view3);
-                    final AlertDialog editor = editorInventoryDialog.create();
+                    editorCustomerDialog.setView(view3);
+                    final AlertDialog editor = editorCustomerDialog.create();
                     editor.show();
 
-                    final TextView tempMovieName = view3.findViewById(R.id.txtMovieName);
-                    final TextView tempUPCCode = view3.findViewById(R.id.txtUPCCode);
-                    final TextView tempMovieID = view3.findViewById(R.id.txtMovieID);
-                    final TextView tempReleaseDate =  view3.findViewById(R.id.txtReleaseDate);
-                    final TextView tempGenre =  view3.findViewById(R.id.txtGenre);
-                    final TextView tempDirector =  view3.findViewById(R.id.txtDirector);
-//                    final EditText tempExpiration = (EditText) view3.findViewById(R.id.edit_customer_ExpirationDate);
-//                    final EditText tempType = (EditText) view3.findViewById(R.id.edit_customer_cardType);
-                    final CheckBox tempCondition = view3.findViewById(R.id.chkGoodCondition);
+                    final EditText tempID = (EditText) view3.findViewById(R.id.edit_movie_code);
+                    final EditText tempReleaseDate = (EditText) view3.findViewById(R.id.edit_movie_releasedate);
+                    final EditText tempDirector = (EditText) view3.findViewById(R.id.edit_movie_director);
+                    final EditText tempActors = (EditText) view3.findViewById(R.id.edit_movie_actors);
+                    final EditText tempGenre = (EditText) view3.findViewById(R.id.edit_movie_genre);
+                    final EditText tempCondition = (EditText) view3.findViewById(R.id.edit_movie_condition);
+                    final EditText tempTitle = (EditText) view3.findViewById(R.id.edit_movie_title);
 
+                    Button editorConfirm = (Button) view3.findViewById(R.id.edit_movie_confirm);
+                    Button editorCancel = (Button) view3.findViewById(R.id.edit_movie_cancel);
 
-                    Button editorConfirm = (Button) view3.findViewById(R.id.btnInvEditConfirm);
-                    Button editorCancel = (Button) view3.findViewById(R.id.btnInvEditCancel);
-
-                    String[] customerTempInfo = db.inventoryRowReturn(upc);
-                    if (customerTempInfo[0] != null) {
-                        tempUPCCode.setText(customerTempInfo[0]);
-                        tempMovieID.setText(customerTempInfo[1]);
-                        tempMovieName.setText(customerTempInfo[2]);
-                        tempDirector.setText(customerTempInfo[3]);
-                        tempCondition.setChecked(customerTempInfo[4].equals("good"));
-                        tempReleaseDate.setText(customerTempInfo[5]);
-                        tempGenre.setText(customerTempInfo[6]);
-//                        tempCard.setHint("************"+customerTempInfo[4].substring(customerTempInfo[4].length()-4));
-//                        tempSecurity.setHint("****");
-//                        tempExpiration.setHint("MMYY");
-//                        tempType.setHint(customerTempInfo[7]);
+                    String[] movieTempInfo = db.inventoryRowReturn(tempMovieUPC);
+                    if (movieTempInfo[0] != null) {
+                        tempTitle.setHint(movieTempInfo[0]);
+                        tempID.setHint(movieTempInfo[1]);
+                        tempReleaseDate.setHint(movieTempInfo[2]);
+                        tempDirector.setHint(movieTempInfo[3]);
+                        tempActors.setHint(movieTempInfo[4]);
+                        tempGenre.setHint(movieTempInfo[5]);
+                        tempCondition.setHint(movieTempInfo[6]);
                     }
 
                     editorConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (!tempMovieID.getText().toString().isEmpty() && !tempMovieName.getText().toString().isEmpty() &&
-                                    !tempDirector.getText().toString().isEmpty() && !tempReleaseDate.getText().toString().isEmpty() &&
-                                    !tempGenre.getText().toString().isEmpty()) {
-                                if (db.removeDvd(tempUPCCode.getText().toString())) {
-                                    if (db.createDvd(tempUPCCode.getText().toString(), tempMovieID.getText().toString(), tempMovieName.getText().toString(), tempDirector.getText().toString(),
-                                            (tempCondition.isChecked())? true : false, tempReleaseDate.getText().toString(), tempGenre.getText().toString())) {
-                                        Toast.makeText(getContext(), "Customer Updated.", Toast.LENGTH_SHORT).show();
+                            if (!tempID.getText().toString().isEmpty() && !tempReleaseDate.getText().toString().isEmpty() &&
+                                    !tempDirector.getText().toString().isEmpty() && !tempActors.getText().toString().isEmpty() && !tempGenre.getText().toString().isEmpty() &&
+                                    !tempCondition.getText().toString().isEmpty()  && !tempTitle.getText().toString().isEmpty()) {
+                                if (db.removeDvd(tempMovieUPC)) {
+                                    if (db.createDvd(tempMovieUPC, tempID.getText().toString(), tempTitle.getText().toString(),
+                                            tempDirector.getText().toString(), tempCondition.getText().toString(), tempReleaseDate.getText().toString(), tempGenre.getText().toString(), tempActors.getText().toString())) {
+                                        Toast.makeText(getContext(), "Movie Updated.", Toast.LENGTH_SHORT).show();
                                         editor.dismiss();
                                     } else {
-                                        Toast.makeText(getContext(), "Customer Update Failed.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Movie Update Failed.", Toast.LENGTH_SHORT).show();
                                         editor.dismiss();
-                                        }
                                     }
                                     refreshList();
-                            }
-                            else {
+                                }
+                            } else {
                                 Toast.makeText(getContext(), "Text Fields CANNOT be empty.", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });
@@ -177,7 +169,6 @@ public class InventoryFragment extends Fragment implements android.widget.Search
                         public void onClick(View v) {
 
                             editor.dismiss();
-                            refreshList();
                         }
                     });
                 }
@@ -192,19 +183,18 @@ public class InventoryFragment extends Fragment implements android.widget.Search
                         editorEmployeeDialog.setView(view3);
                         final AlertDialog editor = editorEmployeeDialog.create();
                         editor.show();
-                        EditText tempMovieName = (EditText) view3.findViewById(R.id.txtMovieName);
 
-                        TextView deleteConfirmation = (TextView) view3.findViewById(R.id.delete_dvd_title);
-                        deleteConfirmation.setText("Delete "+movieName+"?");
-                        Button deleteConfirm = (Button) view3.findViewById(R.id.btnDeleteDvdConfirm);
-                        Button deleteCancel = (Button) view3.findViewById(R.id.btnDeleteDvdCancel);
+                        TextView deleteConfirmation = (TextView) view3.findViewById(R.id.delete_movie_title);
+                        deleteConfirmation.setText("Delete "+tempTitle+"?");
+                        Button deleteConfirm = (Button) view3.findViewById(R.id.delete_movie_confirm);
+                        Button deleteCancel = (Button) view3.findViewById(R.id.delete_movie_cancel);
 
                         deleteConfirm.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                db.removeDvd(upc);
+                                db.removeDvd(tempMovieUPC);
                                 editor.dismiss();
-                                Toast.makeText(getContext(), "Customer Removed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Movie Removed.", Toast.LENGTH_SHORT).show();
                                 refreshList();
                             }
                         });
@@ -283,17 +273,17 @@ public class InventoryFragment extends Fragment implements android.widget.Search
     private String mParam2;
     private SearchView.OnQueryTextListener queryTextListener;
 
-    // name = default/0, id = 1, director = 2, genre = 3 release year = 4
+    // name = default/0, id = 1, cellphone = 2, email = 3. card = 4
     int spinnerSelection;
 
     private int lastExpandedPosition = -1;
     private int currentSelectedGroup;
     UserDatabase db;
-    ExpandableListView inventoryList;
+    ExpandableListView movieList;
     View view;
-    ArrayList<InventoryItem> inventory;
+    ArrayList<InventoryItem> movies;
     InventoryListAdapter adapter;
-    HashMap<String, ArrayList<String>> dvdInformation;
+    HashMap<String, ArrayList<String>> movieInformation;
 
     private OnFragmentInteractionListener mListener;
 
@@ -310,8 +300,8 @@ public class InventoryFragment extends Fragment implements android.widget.Search
      * @return A new instance of fragment EmployeeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InventoryFragment newInstance(String param1, String param2) {
-        InventoryFragment fragment = new InventoryFragment();
+    public static EmployeeFragment newInstance(String param1, String param2) {
+        EmployeeFragment fragment = new EmployeeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -335,7 +325,7 @@ public class InventoryFragment extends Fragment implements android.widget.Search
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_inventory, null);
-        inventoryList = (ExpandableListView) view.findViewById(R.id.lstInventory);
+        movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.inventoryFilter);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getContext(),R.array.inventory_filters, R.layout.inventory_filter);
@@ -346,50 +336,45 @@ public class InventoryFragment extends Fragment implements android.widget.Search
         android.widget.SearchView searchView = (android.widget.SearchView) view.findViewById(R.id.action_search_inventory);
         searchView.setOnQueryTextListener(this);
 
-        FloatingActionButton fab = view.findViewById(R.id.dvdFab);
+        FloatingActionButton fab = view.findViewById(R.id.inventoryfab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder addDvdDialog = new AlertDialog.Builder(getContext());
+                final AlertDialog.Builder addCustomerDialog = new AlertDialog.Builder(getContext());
                 final View view4 = getLayoutInflater().inflate(R.layout.add_dvd_popup, null);
-                addDvdDialog.setView(view4);
-                final AlertDialog add = addDvdDialog.create();
+                addCustomerDialog.setView(view4);
+                final AlertDialog add = addCustomerDialog.create();
                 add.show();
 
-                final EditText tempMovieName = (EditText) view4.findViewById(R.id.txtMovieName);
-                final EditText tempUPCCode = (EditText) view4.findViewById(R.id.txtUPCCode);
-                final EditText tempMovieID = (EditText) view4.findViewById(R.id.txtMovieID);
-                final EditText tempReleaseDate = (EditText) view4.findViewById(R.id.txtReleaseDate);
-                final EditText tempGenre = (EditText) view4.findViewById(R.id.txtGenre);
-                final EditText tempDirector = (EditText) view4.findViewById(R.id.txtDirector);
-                final CheckBox tempCondition = view4.findViewById(R.id.chkGoodCondition);
-//                final EditText tempExpiration = (EditText) view4.findViewById(R.id.add_customer_ExpirationDate);
-//                final EditText tempType = (EditText) view4.findViewById(R.id.add_customer_cardType);
-//                final EditText tempCustomerID = (EditText) view4.findViewById(R.id.add_customer_ID);
+                final EditText tempID = (EditText) view4.findViewById(R.id.add_movie_id);
+                final EditText tempUPC = (EditText) view4.findViewById(R.id.add_movie_code);
+                final EditText tempTitle = (EditText) view4.findViewById(R.id.add_movie_title);
+                final EditText tempReleaseDate = (EditText) view4.findViewById(R.id.add_movie_releasedate);
+                final EditText tempDirector = (EditText) view4.findViewById(R.id.add_movie_director);
+                final EditText tempActors = (EditText) view4.findViewById(R.id.add_movie_actors);
+                final EditText tempGenre = (EditText) view4.findViewById(R.id.add_movie_genre);
+                final EditText tempCondition = (EditText) view4.findViewById(R.id.add_movie_condition);
 
 
-                Button addConfirm = (Button) view4.findViewById(R.id.btnInvAddConfirm);
-                Button addCancel = (Button) view4.findViewById(R.id.btnInvAddCancel);
+                Button addConfirm = (Button) view4.findViewById(R.id.add_movie_confirm);
+                Button addCancel = (Button) view4.findViewById(R.id.add_movie_cancel);
 
                 addConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!tempMovieID.getText().toString().isEmpty() && !tempMovieName.getText().toString().isEmpty() &&
-                                !tempDirector.getText().toString().isEmpty() && !tempReleaseDate.getText().toString().isEmpty() &&
-                                !tempGenre.getText().toString().isEmpty()) {
-
-                                if (db.createDvd(tempUPCCode.getText().toString(), tempMovieID.getText().toString(), tempMovieName.getText().toString(), tempDirector.getText().toString(),
-                                        (tempCondition.isChecked())? true : false, tempReleaseDate.getText().toString(), tempGenre.getText().toString())) {
-                                    Toast.makeText(getContext(), "DVD Created.", Toast.LENGTH_SHORT).show();
-                                    add.dismiss();
-                                } else {
-                                    Toast.makeText(getContext(), "DVD Creation Failed.", Toast.LENGTH_SHORT).show();
-                                    add.dismiss();
-                                }
-
+                        if (!tempID.getText().toString().isEmpty() && !tempUPC.getText().toString().isEmpty() &&
+                                !tempTitle.getText().toString().isEmpty() && !tempReleaseDate.getText().toString().isEmpty() && !tempDirector.getText().toString().isEmpty() &&
+                                !tempActors.getText().toString().isEmpty()  && !tempGenre.getText().toString().isEmpty()  && !tempCondition.getText().toString().isEmpty()) {
+                            if (db.createDvd(tempUPC.getText().toString(), tempID.getText().toString(), tempTitle.getText().toString(), tempDirector.getText().toString(),
+                                    tempCondition.getText().toString(), tempReleaseDate.getText().toString(), tempGenre.getText().toString(), tempActors.getText().toString())) {
+                                Toast.makeText(getContext(), "Movie Added.", Toast.LENGTH_SHORT).show();
+                                add.dismiss();
+                            } else {
+                                Toast.makeText(getContext(), "Movie Addition Failed.", Toast.LENGTH_SHORT).show();
+                                add.dismiss();
+                            }
                             refreshList();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getContext(), "Text Fields CANNOT be empty.", Toast.LENGTH_SHORT).show();
 
                         }
@@ -406,18 +391,18 @@ public class InventoryFragment extends Fragment implements android.widget.Search
             }
         });
 
-        inventory = getInventory();
-        ArrayList<String> movieNames = getDVDNames(inventory);
-        dvdInformation = getDvdInformation(inventory);
-        adapter = new InventoryListAdapter(getContext(),movieNames,dvdInformation);
-        inventoryList.setAdapter(adapter);
+        movies = getMovies();
+        ArrayList<String> movieNames = getMovieNames(movies);
+        movieInformation = getMovieInformation(movies);
+        adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+        movieList.setAdapter(adapter);
 
-        inventoryList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        movieList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
                 if (lastExpandedPosition != -1
                         && groupPosition != lastExpandedPosition) {
-                    inventoryList.collapseGroup(lastExpandedPosition);
+                    movieList.collapseGroup(lastExpandedPosition);
                 }
                 lastExpandedPosition = groupPosition;
                 currentSelectedGroup = groupPosition;
@@ -427,67 +412,67 @@ public class InventoryFragment extends Fragment implements android.widget.Search
         return view;
     }
 
-    public HashMap<String, ArrayList<String>> getDvdInformation(ArrayList<InventoryItem> a)
+    public HashMap<String, ArrayList<String>> getMovieInformation(ArrayList<InventoryItem> a)
     {
-        HashMap<String, ArrayList<String>> dvdInfo = new HashMap<>();
-
+        HashMap<String, ArrayList<String>> movieInfo = new HashMap<>();
         for(int i=0;i<a.size();i++)
         {
-            ArrayList<String> tempList = new ArrayList<>();
+            ArrayList<String> tempList = new ArrayList<String>();
             InventoryItem temp = a.get(i);
-            tempList.add("DVD UPC Code: "+temp.getDvdUpc());
-            tempList.add("Movie ID: "+temp.getDvdId());
-            tempList.add("Director: "+temp.getDvdDirector());
-            tempList.add("Release Date: "+temp.getDvdReleaseDate());
-            tempList.add("Genre: "+temp.getDvdGenre());
-            tempList.add("Condition: " + temp.getDvdCondition());
+            tempList.add("Movie ID: "+temp.getiD());
+            tempList.add("Release Date: "+temp.getReleaseDate());
+            tempList.add("Genre: "+temp.getGenre());
+            tempList.add("Condition: "+temp.getCondition());
+            tempList.add("Director: "+temp.getDirector());
+            tempList.add("Actors: "+temp.getActors());
 
-            dvdInfo.put(a.get(i).getDvdName(), tempList);
+            movieInfo.put(a.get(i).getTitle(), tempList);
         }
-        return dvdInfo;
+        return movieInfo;
     }
 
-    public ArrayList<String> getDVDNames(ArrayList<InventoryItem> a)
+    public ArrayList<String> getMovieNames(ArrayList<InventoryItem> a)
     {
         ArrayList<String> names = new ArrayList<>();
         for(int i = 0;i<a.size();i++)
         {
-            names.add(a.get(i).getDvdName());
+            names.add(a.get(i).getTitle());
         }
         return names;
     }
 
 
-    public ArrayList<InventoryItem> getInventory()
+    public ArrayList<InventoryItem> getMovies()
     {
-        ArrayList<InventoryItem> inventoryTempList = new ArrayList<>();
+        ArrayList<InventoryItem> customerTempList = new ArrayList<>();
 
-        String tempID = "";
-        String tempName = "";
         String tempUPC = "";
+        String tempTitle = "";
+        String tempID = "";
         String tempReleaseDate = "";
         String tempDirector = "";
+        String tempActors = "";
         String tempGenre = "";
         String tempCondition = "";
 
         Cursor res = db.getAllDVDs();
         if(res.getCount() != 0)
         {
-            String[] columns = db.getDvdAttributes();
             while(res.moveToNext())
             {
-                tempUPC = res.getString(res.getColumnIndex(columns[0]));
-                tempID = res.getString(res.getColumnIndex(columns[1]));
-                tempName = res.getString(res.getColumnIndex(columns[2]));
-                tempDirector = res.getString(res.getColumnIndex(columns[3]));
-                tempCondition = res.getString(res.getColumnIndex(columns[4]));
-                tempReleaseDate = res.getString(res.getColumnIndex(columns[5]));
-                tempGenre = res.getString(res.getColumnIndex(columns[6]));
-                InventoryItem item = new InventoryItem(tempUPC, tempName, tempID, tempReleaseDate, tempDirector, tempGenre, tempCondition);
-                inventoryTempList.add(item);
+                tempUPC = res.getString(res.getColumnIndex("UPCCode"));
+                tempTitle = res.getString(res.getColumnIndex("name"));
+                tempID = res.getString(res.getColumnIndex("id"));
+                tempReleaseDate = res.getString(res.getColumnIndex("releaseDate"));
+                tempDirector = res.getString(res.getColumnIndex("director"));
+                tempActors = res.getString(res.getColumnIndex("actors"));
+                tempGenre = res.getString(res.getColumnIndex("genre"));
+                tempCondition = res.getString(res.getColumnIndex("condition"));
+                InventoryItem movieItem = new InventoryItem(tempUPC,tempTitle,tempID,tempReleaseDate,tempDirector,tempActors,tempGenre,tempCondition);
+                customerTempList.add(movieItem);
             }
         }
-        return inventoryTempList;
+        return customerTempList;
     }
 
 
@@ -545,70 +530,88 @@ public class InventoryFragment extends Fragment implements android.widget.Search
     public boolean onQueryTextChange(String newText) {
 
         String userInput = newText.toLowerCase();
-        ArrayList<InventoryItem> dvdListFiltered = new ArrayList<>();
+        ArrayList<InventoryItem> movieListFiltered = new ArrayList<>();
 
-        //Customer ID
+        //Actors
         if(spinnerSelection == 1)
         {
-            for(InventoryItem dvd : inventory) {
-                if (dvd.getDvdUpc().toLowerCase().contains(userInput)) {
-                    dvdListFiltered.add(dvd);
+            for(InventoryItem movie : movies) {
+                if (movie.getActors().toLowerCase().contains(userInput)) {
+                    movieListFiltered.add(movie);
                 }
             }
-
+            movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+            ArrayList<String> movieNames = getMovieNames(movieListFiltered);
+            movieInformation = getMovieInformation(movieListFiltered);
+            adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+            movieList.setAdapter(adapter);
         }
-        //Cell Phone
+        //Director
         else if(spinnerSelection == 2)
         {
-            for(InventoryItem dvd : inventory) {
-                if (dvd.getDvdDirector().toLowerCase().contains(userInput)) {
-                    dvdListFiltered.add(dvd);
+            for(InventoryItem movie : movies) {
+                if (movie.getDirector().toLowerCase().contains(userInput)) {
+                    movieListFiltered.add(movie);
                 }
             }
+            movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+            ArrayList<String> movieNames = getMovieNames(movieListFiltered);
+            movieInformation = getMovieInformation(movieListFiltered);
+            adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+            movieList.setAdapter(adapter);
         }
-        // email
+        // release Date
         else if(spinnerSelection == 3)
         {
-            for(InventoryItem dvd : inventory) {
-                if (dvd.getDvdGenre().toLowerCase().contains(userInput)) {
-                    dvdListFiltered.add(dvd);
+            for(InventoryItem movie : movies) {
+                if (movie.getReleaseDate().toLowerCase().contains(userInput)) {
+                    movieListFiltered.add(movie);
                 }
             }
+            movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+            ArrayList<String> movieNames = getMovieNames(movieListFiltered);
+            movieInformation = getMovieInformation(movieListFiltered);
+            adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+            movieList.setAdapter(adapter);
         }
-        // card
+        // UPC Code
         else if(spinnerSelection == 4)
         {
-            for(InventoryItem dvd : inventory) {
-                if (dvd.getDvdReleaseDate().toLowerCase().contains(userInput)) {
-                    dvdListFiltered.add(dvd);
+            for(InventoryItem movie : movies) {
+                if (movie.getUPCCode().toLowerCase().contains(userInput)) {
+                    movieListFiltered.add(movie);
                 }
             }
+            movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+            ArrayList<String> movieNames = getMovieNames(movieListFiltered);
+            movieInformation = getMovieInformation(movieListFiltered);
+            adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+            movieList.setAdapter(adapter);
         }
         else
         {
-            for(InventoryItem dvd : inventory) {
-                if (dvd.getDvdName().toLowerCase().contains(userInput)) {
-                    dvdListFiltered.add(dvd);
+            for(InventoryItem movie : movies) {
+                if (movie.getTitle().toLowerCase().contains(userInput)) {
+                    movieListFiltered.add(movie);
                 }
             }
+            movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+            ArrayList<String> movieNames = getMovieNames(movieListFiltered);
+            movieInformation = getMovieInformation(movieListFiltered);
+            adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+            movieList.setAdapter(adapter);
         }
-        inventoryList = (ExpandableListView) view.findViewById(R.id.lstInventory);
-        ArrayList<String> customerNames = getDVDNames(dvdListFiltered);
-        dvdInformation = getDvdInformation(dvdListFiltered);
-        adapter = new InventoryListAdapter(getContext(),customerNames,dvdInformation);
-        inventoryList.setAdapter(adapter);
-
         return false;
     }
 
     public void refreshList()
     {
-        inventoryList = (ExpandableListView) view.findViewById(R.id.lstInventory);
-        inventory = getInventory();
-        ArrayList<String> customerNames = getDVDNames(inventory);
-        dvdInformation = getDvdInformation(inventory);
-        adapter = new InventoryListAdapter(getContext(),customerNames,dvdInformation);
-        inventoryList.setAdapter(adapter);
+        movieList = (ExpandableListView) view.findViewById(R.id.inventory_listed);
+        movies = getMovies();
+        ArrayList<String> movieNames = getMovieNames(movies);
+        movieInformation = getMovieInformation(movies);
+        adapter = new InventoryListAdapter(getContext(),movieNames,movieInformation);
+        movieList.setAdapter(adapter);
     }
 
     @Override

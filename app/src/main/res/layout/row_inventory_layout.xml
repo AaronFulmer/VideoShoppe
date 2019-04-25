@@ -13,14 +13,14 @@
         android:id="@+id/inventoryListHeader"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:maxLines="1"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:paddingBottom="6dp"
-        android:text="Test Header"
-        android:textColor="@color/colorPrimary"
+        android:gravity="center_vertical"
         android:textSize="24dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Test Header"
+        android:paddingBottom="6dp"
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
